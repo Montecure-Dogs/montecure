@@ -1,0 +1,631 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>montecure.dogs - Premium Dog Walking Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              sage: {
+                50: '#F5F6F5',
+                100: '#E6E9E6',
+                200: '#CDD3CE',
+                300: '#A9B3AA',
+                400: '#819083',
+                500: '#647466',
+                600: '#4E5C50',
+                700: '#404B42',
+                800: '#353E36',
+                900: '#2E352F',
+              },
+              terracotta: {
+                50: '#FAF4F0',
+                100: '#F3E5DC',
+                200: '#E6C6B3',
+                300: '#D59F81',
+                400: '#C27552',
+                500: '#B65D39',
+                600: '#A34B2E',
+                700: '#873C27',
+                800: '#6E3222',
+                900: '#5A2A1E',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      .hero-gradient {
+        background: radial-gradient(circle at top right, rgba(213, 159, 129, 0.08), transparent 50%),
+                    radial-gradient(circle at bottom left, rgba(169, 179, 170, 0.15), transparent 60%);
+      }
+      .scroll-smooth {
+        scroll-behavior: smooth;
+      }
+      .custom-blur {
+        backdrop-filter: blur(12px);
+      }
+    </style>
+  </head>
+  <body class="scroll-smooth bg-stone-50/50 text-sage-900 font-sans antialiased">
+    <nav class="fixed w-full bg-white/80 custom-blur border-b border-sage-100 z-40 transition-all duration-300">
+      <div class="container mx-auto px-6">
+        <div class="flex justify-between items-center py-5">
+          <div class="flex items-center space-x-3 group cursor-pointer">
+            <div class="w-10 h-10 rounded-xl bg-sage-600 flex items-center justify-center text-white shadow-md shadow-sage-600/10 transition-transform duration-300 group-hover:scale-105">
+              <i class="fas fa-dog text-lg text-terracotta-200"></i>
+            </div>
+            <span class="text-2xl font-black tracking-tight text-sage-800">montecure<span class="text-terracotta-500">.dogs</span></span>
+          </div>
+          <div class="hidden md:flex items-center space-x-8">
+            <a href="#home" class="text-sage-600 hover:text-terracotta-600 font-semibold tracking-wide transition duration-200">Home</a>
+            <a href="#services" class="text-sage-600 hover:text-terracotta-600 font-semibold tracking-wide transition duration-200">Services</a>
+            <a href="#about" class="text-sage-600 hover:text-terracotta-600 font-semibold tracking-wide transition duration-200">About</a>
+            <a href="#contact" class="bg-sage-700 text-white px-5 py-2.5 rounded-xl hover:bg-terracotta-600 shadow-md shadow-sage-700/10 transition duration-200 font-semibold">Get in Touch</a>
+          </div>
+          <button id="mobile-menu-btn" class="md:hidden w-10 h-10 rounded-xl bg-sage-50 flex items-center justify-center text-sage-700 hover:bg-sage-100 transition focus:outline-none">
+            <i class="fas fa-bars text-lg"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div id="menu-overlay" class="fixed inset-0 bg-sage-900/95 custom-blur z-50 flex flex-col justify-between p-8 pointer-events-none opacity-0 scale-95 transition-all duration-300">
+      <div class="flex justify-between items-center w-full">
+        <div class="flex items-center space-x-2">
+          <i class="fas fa-dog text-terracotta-400 text-2xl"></i>
+          <span class="text-2xl font-bold tracking-tight text-white">montecure.dogs</span>
+        </div>
+        <button id="close-overlay-btn" class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition focus:outline-none">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      <div class="flex flex-col space-y-6 text-center">
+        <a href="#home" onclick="closeOverlay()" class="text-3xl font-bold text-white/95 hover:text-terracotta-400 transition">Home</a>
+        <a href="#services" onclick="closeOverlay()" class="text-3xl font-bold text-white/95 hover:text-terracotta-400 transition">Services</a>
+        <a href="#about" onclick="closeOverlay()" class="text-3xl font-bold text-white/95 hover:text-terracotta-400 transition">About</a>
+        <a href="#contact" onclick="closeOverlay()" class="text-3xl font-bold text-white/95 hover:text-terracotta-400 transition">Contact</a>
+      </div>
+      <div class="text-center text-xs text-white/40">
+        <p>montecure.dogs © 2026</p>
+      </div>
+    </div>
+
+    <section id="home" class="hero-gradient pt-36 pb-24 border-b border-sage-100">
+      <div class="container mx-auto px-6">
+        <div class="flex flex-col lg:flex-row items-center gap-16">
+          <div class="lg:w-1/2">
+            <div class="inline-flex items-center gap-2 bg-sage-100 text-sage-800 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider mb-6">
+              <i class="fas fa-certificate text-terracotta-500"></i> Fully Insured & DBS Checked
+            </div>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-sage-900 leading-[1.1] tracking-tight mb-6">
+              Professional Dog Walking in <span class="text-sage-600 underline decoration-terracotta-400 decoration-wavy underline-offset-8">Stockport</span>
+            </h1>
+            <p class="text-lg sm:text-xl text-sage-600 mb-8 leading-relaxed font-light">
+              Reliable, insured, and deeply loving care for your absolute best friends. We provide your companion with active exercise, careful socialization, and dedicated individual attention.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <button onclick="scrollToSection('contact')" class="bg-terracotta-500 text-white px-8 py-4 rounded-xl hover:bg-terracotta-600 transition duration-300 font-bold shadow-lg shadow-terracotta-500/20 text-center">
+                Get a Free Quote
+              </button>
+              <button onclick="scrollToSection('services')" class="border-2 border-sage-600 text-sage-800 bg-white/40 custom-blur px-8 py-4 rounded-xl hover:bg-sage-50 transition duration-300 font-bold text-center">
+                Our Services
+              </button>
+            </div>
+          </div>
+          <div class="lg:w-1/2 relative">
+            <div class="absolute -top-4 -left-4 bg-terracotta-500 text-white px-5 py-2 rounded-2xl text-sm font-bold shadow-lg z-10 transform -rotate-3 hover:rotate-0 transition-transform duration-300">Meet Gus! <i class="fas fa-heart text-white ml-1"></i></div>
+            <div class="relative group">
+              <div class="absolute inset-0 bg-gradient-to-tr from-sage-600 to-terracotta-400 rounded-3xl transform translate-x-3 translate-y-3 opacity-20 group-hover:translate-x-5 group-hover:translate-y-5 transition-all duration-300"></div>
+              <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=600&amp;h=400&amp;fit=crop" alt="Gus the beautiful golden retriever" class="rounded-3xl shadow-xl border-4 border-white relative w-full h-auto object-cover transform transition duration-500 group-hover:scale-[1.01]" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="py-24 bg-white">
+      <div class="container mx-auto px-6">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="text-xs font-bold uppercase tracking-widest text-terracotta-500 bg-terracotta-50 px-3 py-1 rounded-full">Tailored Care</span>
+          <h2 class="text-3xl md:text-5xl font-black text-sage-900 mt-4 mb-4">Our Premium Services</h2>
+          <p class="text-lg text-sage-600 font-light">Whether daily or occasional, discover simple and professional options tailored precisely to your dog's schedule.</p>
+        </div>
+        <div class="grid lg:grid-cols-3 gap-8 mb-16">
+          <div class="bg-sage-50/50 p-8 rounded-2xl hover:bg-white border-2 border-transparent hover:border-sage-100 hover:shadow-2xl hover:shadow-sage-600/5 transition duration-300 flex flex-col justify-between">
+            <div>
+              <div class="w-14 h-14 rounded-2xl bg-sage-100 flex items-center justify-center text-sage-700 text-2xl mb-6">
+                <i class="fas fa-walking"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-sage-800 mb-3">Group Walks</h3>
+              <p class="text-sage-600 mb-6 leading-relaxed text-sm">
+                Stimulating 45-minute group walks designed specifically for healthy physical exercise and safe social development.
+              </p>
+              <ul class="text-sage-700 space-y-3.5 border-t border-sage-100 pt-6">
+                <li class="flex items-center text-sm font-medium">
+                  <span class="w-5 h-5 rounded-full bg-sage-200 flex items-center justify-center text-[10px] text-sage-800 mr-2.5"><i class="fas fa-check"></i></span>
+                  £14 per dog (45 Minutes)
+                </li>
+                <li class="flex items-center text-sm font-medium">
+                  <span class="w-5 h-5 rounded-full bg-sage-200 flex items-center justify-center text-[10px] text-sage-800 mr-2.5"><i class="fas fa-check"></i></span>
+                  Maximum 4 dogs per walk
+                </li>
+                <li class="flex items-center text-sm font-medium">
+                  <span class="w-5 h-5 rounded-full bg-sage-200 flex items-center justify-center text-[10px] text-sage-800 mr-2.5"><i class="fas fa-check"></i></span>
+                  Invaluable positive socialization
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="bg-white p-8 rounded-2xl border-2 border-terracotta-200/60 shadow-xl shadow-terracotta-500/5 hover:scale-[1.02] transition duration-300 flex flex-col justify-between">
+            <div>
+              <div class="w-14 h-14 rounded-2xl bg-terracotta-50 flex items-center justify-center text-terracotta-500 text-2xl mb-6">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-sage-800 mb-3">Walk &amp; Train</h3>
+              <p class="text-sage-600 mb-6 leading-relaxed text-sm">
+                A highly comprehensive, structured, full-hour walk combined with personalized obedience training and behavior reinforcers.
+              </p>
+              <ul class="text-sage-700 space-y-3.5 border-t border-sage-100 pt-6">
+                <li class="flex items-center text-sm font-medium">
+                  <span class="w-5 h-5 rounded-full bg-terracotta-100 flex items-center justify-center text-[10px] text-terracotta-700 mr-2.5"><i class="fas fa-check"></i></span>
+                  Full 60-minute duration
+                </li>
+                <li class="flex items-center text-sm font-medium">
+                  <span class="w-5 h-5 rounded-full bg-terracotta-100 flex items-center justify-center text-[10px] text-terracotta-700 mr-2.5"><i class="fas fa-check"></i></span>
+                  Reinforces key commands
+                </li>
+                <li class="flex items-center text-sm font-medium">
+                  <span class="w-5 h-5 rounded-full bg-terracotta-100 flex items-center justify-center text-[10px] text-terracotta-700 mr-2.5"><i class="fas fa-check"></i></span>
+                  Polite manners on lead
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="bg-sage-50/50 p-8 rounded-2xl hover:bg-white border-2 border-transparent hover:border-sage-100 hover:shadow-2xl hover:shadow-sage-600/5 transition duration-300 flex flex-col justify-between">
+            <div>
+              <div class="w-14 h-14 rounded-2xl bg-sage-100 flex items-center justify-center text-sage-700 text-2xl mb-6">
+                <i class="fas fa-home"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-sage-800 mb-3">Pet Sitting</h3>
+              <p class="text-sage-600 mb-6 leading-relaxed text-sm">
+                Personalized drop-in visits or overnight pet sitting in your home, providing safe, loving supervision and care.
+              </p>
+              <ul class="text-sage-700 space-y-3.5 border-t border-sage-100 pt-6">
+                <li class="flex items-center text-sm font-medium">
+                  <span class="w-5 h-5 rounded-full bg-sage-200 flex items-center justify-center text-[10px] text-sage-800 mr-2.5"><i class="fas fa-check"></i></span>
+                  Day Sitting: £25 per day
+                </li>
+                <li class="flex items-center text-sm font-medium">
+                  <span class="w-5 h-5 rounded-full bg-sage-200 flex items-center justify-center text-[10px] text-sage-800 mr-2.5"><i class="fas fa-check"></i></span>
+                  Overnight: £35 per night
+                </li>
+                <li class="flex items-center text-sm font-medium">
+                  <span class="w-5 h-5 rounded-full bg-sage-200 flex items-center justify-center text-[10px] text-sage-800 mr-2.5"><i class="fas fa-check"></i></span>
+                  Includes feedings & companionship
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="bg-sage-100 border border-sage-200/40 p-8 rounded-2xl max-w-4xl mx-auto flex flex-col sm:flex-row items-center gap-6 shadow-sm">
+          <div class="w-12 h-12 rounded-xl bg-terracotta-500 text-white flex items-center justify-center flex-shrink-0 text-xl shadow">
+            <i class="fas fa-tag"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-sage-900 mb-1">Block Booking Discounts Available</h3>
+            <p class="text-sage-600 text-sm leading-relaxed">We offer exceptional rate reductions for clients booking on regular, recurring plans. Simply let us know what fits your schedule.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="py-24 bg-sage-50 border-t border-b border-sage-100">
+      <div class="container mx-auto px-6">
+        <div class="flex flex-col lg:flex-row items-center gap-16">
+          <div class="lg:w-1/2">
+            <span class="text-xs font-bold uppercase tracking-widest text-terracotta-500">Alexander & Company</span>
+            <h2 class="text-3xl md:text-5xl font-black text-sage-900 mt-4 mb-6">Welcome to montecure.dogs</h2>
+            <p class="text-sage-600 text-lg mb-6 leading-relaxed font-light">
+              I'm Alexander, a dedicated dog walker and caregiver based in Stockport. My focus centers on providing safe, active, and balanced care tailored strictly to each companion's requirements.
+            </p>
+            <p class="text-sage-600 text-lg mb-8 leading-relaxed font-light">
+              We look after every client's dog as if they are our own. Through dependable structures, healthy routines, and close communication, you can rest completely easy knowing your dog is having a safe and wonderful day out.
+            </p>
+            <div class="space-y-4">
+              <div class="flex items-start gap-4 p-5 bg-white border border-sage-100 rounded-xl shadow-sm">
+                <span class="w-8 h-8 rounded-lg bg-terracotta-50 flex items-center justify-center text-terracotta-500"><i class="fas fa-handshake"></i></span>
+                <div>
+                  <h4 class="font-bold text-sage-900 text-sm">Free Meet &amp; Greet</h4>
+                  <p class="text-sage-600 text-xs mt-1">We schedule a free home session so your dog can comfortably introduce themselves to me first.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4 p-5 bg-white border border-sage-100 rounded-xl shadow-sm">
+                <span class="w-8 h-8 rounded-lg bg-sage-100 flex items-center justify-center text-sage-700"><i class="fas fa-shield-alt"></i></span>
+                <div>
+                  <h4 class="font-bold text-sage-900 text-sm">Fully Insured Assurance</h4>
+                  <p class="text-sage-600 text-xs mt-1">We back every walk and sitting booking with full liability coverage for comprehensive peace of mind.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="lg:w-1/2">
+            <div class="relative group">
+              <div class="absolute inset-0 bg-terracotta-500 rounded-3xl transform translate-x-3 translate-y-3 opacity-10"></div>
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRN2z0ERwXQUqH29urPuzWueLXKhJAY6SMyAA&amp;s" alt="Alexander interacting with happy dogs on walks" class="rounded-3xl shadow-xl w-full h-auto object-cover border-4 border-white" style="min-height: 420px;" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="py-24 bg-white">
+      <div class="container mx-auto px-6">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="text-xs font-bold uppercase tracking-widest text-terracotta-500 bg-terracotta-50 px-3 py-1 rounded-full">Book Today</span>
+          <h2 class="text-3xl md:text-5xl font-black text-sage-900 mt-4 mb-4">Let's Get in Touch</h2>
+          <p class="text-lg text-sage-600 font-light">Get a free consultation booked or ask any clarifying questions about our walks.</p>
+        </div>
+        <div class="max-w-5xl mx-auto">
+          <div class="grid lg:grid-cols-12 gap-12 items-start">
+            <div class="lg:col-span-5 space-y-8">
+              <div>
+                <h3 class="text-2xl font-bold text-sage-800 mb-6">Contact Information</h3>
+                <div class="space-y-4">
+                  <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-sage-50 border border-sage-100 flex items-center justify-center text-sage-700"><i class="fas fa-phone"></i></div>
+                    <span class="text-sage-700 font-semibold text-sm">07783733898</span>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-sage-50 border border-sage-100 flex items-center justify-center text-sage-700"><i class="fas fa-envelope"></i></div>
+                    <span class="text-sage-700 font-semibold text-sm">mont3cure@gmail.com</span>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-sage-50 border border-sage-100 flex items-center justify-center text-sage-700"><i class="fas fa-map-marker-alt"></i></div>
+                    <span class="text-sage-700 font-semibold text-sm">Stockport, SK4 1AB</span>
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-sage-50 border border-sage-100 flex items-center justify-center text-sage-700"><i class="fas fa-clock"></i></div>
+                    <span class="text-sage-700 text-xs">Mon-Fri: 7am-7pm, Sat-Sun: 8am-6pm</span>
+                  </div>
+                </div>
+              </div>
+              <div class="pt-6 border-t border-sage-100">
+                <h4 class="font-bold text-sage-800 mb-3">Service Areas Included</h4>
+                <p class="text-sage-600 text-sm leading-relaxed">
+                  Stockport, Cheadle, Bramhall, Hazel Grove, Marple, and all general neighboring areas.
+                </p>
+              </div>
+            </div>
+            <div class="lg:col-span-7 bg-sage-50 p-8 rounded-3xl border border-sage-100">
+              <div class="mb-8">
+                <div class="flex justify-between items-center relative">
+                  <div class="flex flex-col items-center z-10">
+                    <div id="step1-indicator" class="w-10 h-10 bg-terracotta-500 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-md transition-all duration-300">1</div>
+                    <span class="mt-2 text-[11px] font-bold text-sage-700">Contact</span>
+                  </div>
+                  <div class="flex-1 flex items-center justify-center px-1">
+                    <div class="w-full h-1 bg-sage-200 rounded-full overflow-hidden">
+                      <div id="progress-bar-1" class="w-0 h-full bg-sage-600 transition-all duration-300"></div>
+                    </div>
+                  </div>
+                  <div class="flex flex-col items-center z-10">
+                    <div id="step2-indicator" class="w-10 h-10 bg-sage-200 text-sage-600 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300">2</div>
+                    <span class="mt-2 text-[11px] font-bold text-sage-500">Service</span>
+                  </div>
+                  <div class="flex-1 flex items-center justify-center px-1">
+                    <div class="w-full h-1 bg-sage-200 rounded-full overflow-hidden">
+                      <div id="progress-bar-2" class="w-0 h-full bg-sage-600 transition-all duration-300"></div>
+                    </div>
+                  </div>
+                  <div class="flex flex-col items-center z-10">
+                    <div id="step3-indicator" class="w-10 h-10 bg-sage-200 text-sage-600 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300">3</div>
+                    <span class="mt-2 text-[11px] font-bold text-sage-500">Details</span>
+                  </div>
+                </div>
+              </div>
+              <form action="https://formspree.io/f/mjgjywjy" method="POST" id="multi-step-form" class="space-y-5">
+                <div id="step1" class="step-content space-y-4">
+                  <div>
+                    <label class="block text-sm font-bold text-sage-700 mb-1.5">Your Full Name</label>
+                    <input type="text" name="name" required class="w-full px-4 py-3 border border-sage-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-sage-600/30 transition-all" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-sage-700 mb-1.5">Email Address</label>
+                    <input type="email" name="email" required class="w-full px-4 py-3 border border-sage-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-sage-600/30 transition-all" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-sage-700 mb-1.5">Phone Number</label>
+                    <input type="tel" name="phone" class="w-full px-4 py-3 border border-sage-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-sage-600/30 transition-all" />
+                  </div>
+                  <div id="step1-error" class="hidden p-4 bg-red-50 border border-red-200 rounded-xl">
+                    <p class="text-red-700 text-sm"><i class="fas fa-exclamation-circle mr-2"></i>Please fill out the required information.</p>
+                  </div>
+                  <div class="flex justify-end pt-2">
+                    <button type="button" onclick="nextStep(1)" class="bg-terracotta-500 text-white px-6 py-3 rounded-xl hover:bg-terracotta-600 transition font-bold flex items-center gap-2 shadow-md shadow-terracotta-500/10">
+                      Next <i class="fas fa-arrow-right text-xs"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div id="step2" class="step-content hidden space-y-4">
+                  <div>
+                    <label class="block text-sm font-bold text-sage-700 mb-1.5">Select Needed Service</label>
+                    <select name="service" required class="w-full px-4 py-3 border border-sage-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-sage-600/30 transition-all">
+                      <option value="">Choose a service...</option>
+                      <option value="group">Group Walk (45 Min) - £14.00 (Max 4 Dogs)</option>
+                      <option value="walk-train">Walk &amp; Train (Full Hour)</option>
+                      <option value="day-sit">Day Sitting - £25.00</option>
+                      <option value="night-sit">Overnight Sitting - £35.00</option>
+                      <option value="block-booking">Block Booking (Discount Available)</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div class="bg-sage-100 p-4 rounded-xl border border-sage-200/40">
+                    <p class="text-xs text-sage-700 leading-relaxed">
+                      <i class="fas fa-info-circle text-terracotta-500 mr-1.5"></i>
+                      Selecting <strong>Walk &amp; Train</strong> automatically assigns a customized complete 1-hour schedule.
+                    </p>
+                  </div>
+                  <div id="step2-error" class="hidden p-4 bg-red-50 border border-red-200 rounded-xl">
+                    <p class="text-red-700 text-sm"><i class="fas fa-exclamation-circle mr-2"></i>Please select a valid service to continue.</p>
+                  </div>
+                  <div class="flex justify-between pt-2">
+                    <button type="button" onclick="prevStep(2)" class="bg-white border border-sage-200 text-sage-700 px-6 py-3 rounded-xl hover:bg-sage-100 transition font-bold flex items-center gap-2">
+                      <i class="fas fa-arrow-left text-xs"></i> Back
+                    </button>
+                    <button type="button" onclick="nextStep(2)" class="bg-terracotta-500 text-white px-6 py-3 rounded-xl hover:bg-terracotta-600 transition font-bold flex items-center gap-2 shadow-md shadow-terracotta-500/10">
+                      Next <i class="fas fa-arrow-right text-xs"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div id="step3" class="step-content hidden space-y-4">
+                  <div>
+                    <label class="block text-sm font-bold text-sage-700 mb-1.5">Dog's Name</label>
+                    <input type="text" name="dog-name" required class="w-full px-4 py-3 border border-sage-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-sage-600/30 transition-all" />
+                  </div>
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-sm font-bold text-sage-700 mb-1.5">Breed (Optional)</label>
+                      <input type="text" name="dog-breed" class="w-full px-4 py-3 border border-sage-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-sage-600/30 transition-all" />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-bold text-sage-700 mb-1.5">Age (Optional)</label>
+                      <input type="text" name="dog-age" class="w-full px-4 py-3 border border-sage-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-sage-600/30 transition-all" />
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-sage-700 mb-1.5">Tell us about your dog</label>
+                    <textarea name="message" rows="3" placeholder="Temperament details, unique needs, play habits, etc..." class="w-full px-4 py-3 border border-sage-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-sage-600/30 transition-all"></textarea>
+                  </div>
+                  <div class="flex justify-between pt-2">
+                    <button type="button" onclick="prevStep(3)" class="bg-white border border-sage-200 text-sage-700 px-6 py-3 rounded-xl hover:bg-sage-100 transition font-bold flex items-center gap-2">
+                      <i class="fas fa-arrow-left text-xs"></i> Back
+                    </button>
+                    <button type="submit" class="bg-sage-700 text-white px-6 py-3 rounded-xl hover:bg-sage-800 transition font-bold flex items-center gap-2 shadow-md shadow-sage-700/10">
+                      <i class="fas fa-paper-plane text-xs"></i> Send Request
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-sage-900 text-white py-16">
+      <div class="container mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-8 border-b border-sage-800 pb-12 mb-12">
+          <div class="text-center md:text-left">
+            <div class="flex items-center justify-center md:justify-start space-x-3 mb-3">
+              <div class="w-8 h-8 rounded-lg bg-terracotta-500 text-white flex items-center justify-center text-sm"><i class="fas fa-dog"></i></div>
+              <span class="text-2xl font-black tracking-tight">montecure.dogs</span>
+            </div>
+            <p class="text-sage-400 text-sm font-light">Premium and fully insured dog walking services based in Stockport</p>
+          </div>
+          <div class="flex gap-4">
+            <a href="https://facebook.com/montecure.dogs" target="_blank" class="w-11 h-11 rounded-xl bg-sage-800/80 hover:bg-terracotta-500 flex items-center justify-center text-sage-300 hover:text-white transition-all duration-300">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://instagram.com/montecure.dogs" target="_blank" class="w-11 h-11 rounded-xl bg-sage-800/80 hover:bg-terracotta-500 flex items-center justify-center text-sage-300 hover:text-white transition-all duration-300">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://youtube.com/@montecure.dogs" target="_blank" class="w-11 h-11 rounded-xl bg-sage-800/80 hover:bg-terracotta-500 flex items-center justify-center text-sage-300 hover:text-white transition-all duration-300">
+              <i class="fab fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+        <div class="text-center text-xs text-sage-500 space-y-3">
+          <p>© 2026 montecure.dogs. All rights reserved. | Fully Insured | DBS Checked</p>
+          <p>
+            Website designed by
+            <a href="https://jamesstudio.pages.dev" target="_blank" class="text-terracotta-400 hover:text-terracotta-300 transition underline decoration-1 underline-offset-4">James Theakston</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const menuBtn = document.getElementById('mobile-menu-btn');
+      const closeBtn = document.getElementById('close-overlay-btn');
+      const overlay = document.getElementById('menu-overlay');
+
+      menuBtn.addEventListener('click', openOverlay);
+      closeBtn.addEventListener('click', closeOverlay);
+
+      function openOverlay() {
+        overlay.classList.remove('pointer-events-none', 'opacity-0', 'scale-95');
+        overlay.classList.add('pointer-events-auto', 'opacity-100', 'scale-100');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeOverlay() {
+        overlay.classList.remove('pointer-events-auto', 'opacity-100', 'scale-100');
+        overlay.classList.add('pointer-events-none', 'opacity-0', 'scale-95');
+        document.body.style.overflow = '';
+      }
+
+      function scrollToSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      let currentStep = 1;
+      const totalSteps = 3;
+
+      function showStep(stepNumber) {
+        document.querySelectorAll('.step-content').forEach(step => {
+          step.classList.add('hidden');
+        });
+        document.getElementById(`step${stepNumber}`).classList.remove('hidden');
+        updateProgressIndicators(stepNumber);
+      }
+
+      function updateProgressIndicators(stepNumber) {
+        for (let i = 1; i <= totalSteps; i++) {
+          const indicator = document.getElementById(`step${i}-indicator`);
+          if (i < stepNumber) {
+            indicator.className = 'w-10 h-10 bg-sage-600 text-white rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300';
+            indicator.innerHTML = '<i class="fas fa-check text-xs"></i>';
+          } else if (i === stepNumber) {
+            indicator.className = 'w-10 h-10 bg-terracotta-500 text-white rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 shadow-md shadow-terracotta-500/20';
+            indicator.innerText = i;
+          } else {
+            indicator.className = 'w-10 h-10 bg-sage-200 text-sage-600 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300';
+            indicator.innerText = i;
+          }
+        }
+        
+        const bar1 = document.getElementById('progress-bar-1');
+        const bar2 = document.getElementById('progress-bar-2');
+        
+        if (stepNumber === 1) {
+          bar1.style.width = '0%';
+          bar2.style.width = '0%';
+        } else if (stepNumber === 2) {
+          bar1.style.width = '100%';
+          bar2.style.width = '0%';
+        } else if (stepNumber === 3) {
+          bar1.style.width = '100%';
+          bar2.style.width = '100%';
+        }
+      }
+
+      function validateStep(stepNumber) {
+        const currentStepElement = document.getElementById(`step${stepNumber}`);
+        const requiredFields = currentStepElement.querySelectorAll('[required]');
+        const errorElement = document.getElementById(`step${stepNumber}-error`);
+        
+        if (errorElement) {
+          errorElement.classList.add('hidden');
+        }
+        
+        requiredFields.forEach(field => {
+          field.classList.remove('border-red-500');
+        });
+        
+        for (let field of requiredFields) {
+          if (!field.value.trim()) {
+            field.focus();
+            field.classList.add('border-red-500');
+            if (errorElement) {
+              errorElement.classList.remove('hidden');
+            }
+            return false;
+          }
+          
+          if (field.type === 'email' && field.value.trim()) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(field.value.trim())) {
+              field.focus();
+              field.classList.add('border-red-500');
+              if (errorElement) {
+                errorElement.classList.remove('hidden');
+                errorElement.querySelector('p').innerHTML = '<i class="fas fa-exclamation-circle mr-2"></i>Please enter a valid email address.';
+              }
+              return false;
+            }
+          }
+        }
+        return true;
+      }
+
+      function nextStep(stepNumber) {
+        if (validateStep(stepNumber)) {
+          if (stepNumber < totalSteps) {
+            currentStep = stepNumber + 1;
+            showStep(currentStep);
+          }
+        }
+      }
+
+      function prevStep(stepNumber) {
+        if (stepNumber > 1) {
+          currentStep = stepNumber - 1;
+          showStep(currentStep);
+        }
+      }
+
+      document.getElementById('multi-step-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (!validateStep(3)) {
+          return;
+        }
+        
+        const submitButton = this.querySelector('button[type="submit"]');
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending...';
+        submitButton.disabled = true;
+        
+        const formData = new FormData(this);
+        
+        fetch(this.action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        })
+        .then(response => {
+          if (response.ok) {
+            this.style.display = 'none';
+            const successDiv = document.createElement('div');
+            successDiv.className = 'text-center p-8 bg-sage-100 rounded-2xl border border-sage-200/40 shadow-sm';
+            successDiv.innerHTML = `
+              <i class="fas fa-check-circle text-terracotta-500 text-5xl mb-4"></i>
+              <h3 class="text-2xl font-bold text-sage-900 mb-2">Thank You!</h3>
+              <p class="text-sage-600 mb-4 text-sm">Your booking request was sent successfully.</p>
+              <p class="text-sage-600 text-sm">I'll reach back within 24 hours.</p>
+            `;
+            this.parentNode.appendChild(successDiv);
+          } else {
+            submitButton.innerHTML = 'Error - Try Again';
+            submitButton.disabled = false;
+          }
+        })
+        .catch(error => {
+          submitButton.innerHTML = 'Error - Try Again';
+          submitButton.disabled = false;
+        });
+      });
+
+      window.addEventListener('scroll', function() {
+        const nav = document.querySelector('nav');
+        if (window.scrollY > 50) {
+          nav.classList.add('shadow-xl', 'bg-white/95');
+        } else {
+          nav.classList.remove('shadow-xl', 'bg-white/95');
+        }
+      });
+    </script>
+  </body>
+</html>
