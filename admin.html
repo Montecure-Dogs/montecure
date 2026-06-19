@@ -127,6 +127,7 @@
       <div class="container mx-auto px-6">
         <div class="text-center text-xs text-sage-500 space-y-2">
           <p>© 2026 montecure.dogs. All rights reserved.</p>
+          <a href="#" onclick="resetSession(); return false;" class="text-sage-400 hover:text-terracotta-400 underline">Reset Session</a>
         </div>
       </div>
     </footer>
@@ -135,6 +136,21 @@
     <script src="https://cdn.auth0.com/js/auth0-spa-js/2.18/auth0-spa-js.production.js"></script>
 
     <script>
+      // Reset session function
+      function resetSession() {
+        // Clear all storage
+        localStorage.clear();
+        sessionStorage.clear();
+        
+        // Clear cookies by setting them to expire
+        document.cookie.split(";").forEach(function(c) { 
+          document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+        });
+        
+        // Reload the page
+        location.reload();
+      }
+
       // Helpers
       const displayView = name => ['loading', 'error', 'authenticated', 'unauthenticated'].forEach(v => document.getElementById(`view-${v}`).hidden = v !== name);
       const setTextContent = (id, content) => document.getElementById(id).textContent = content;
