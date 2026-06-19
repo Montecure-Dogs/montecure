@@ -112,6 +112,7 @@
       crossorigin="anonymous"
       data-clerk-publishable-key="pk_test_dGhhbmtmdWwtc2hhcmstNDguY2xlcmsuYWNjb3VudHMuZGV2JA"
       src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+      onload="initClerk()"
     ></script>
 
     <script>
@@ -137,7 +138,7 @@
       });
       const setTextContent = (id, content) => document.getElementById(id).textContent = content;
 
-      (async () => {
+      async function initClerk() {
         try {
           // Wait for Clerk to load
           await window.Clerk.load();
@@ -165,7 +166,7 @@
           setTextContent("error-message", `An error occurred: ${error.message}`);
           displayView("error");
         }
-      })();
+      }
     </script>
   </body>
 </html>
