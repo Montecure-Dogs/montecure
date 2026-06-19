@@ -107,6 +107,7 @@
     crossorigin="anonymous"
     data-clerk-publishable-key="pk_test_dGhhbmtmdWwtc2hhcmstNDguY2xlcmsuYWNjb3VudHMuZGV2JA"
     src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+    onload="initClerk()"
   ></script>
 
   <script>
@@ -144,7 +145,7 @@
       }
     });
 
-    (async () => {
+    async function initClerk() {
       try {
         await window.Clerk.load();
 
@@ -159,7 +160,16 @@
         errorMessage.textContent = `An error occurred: ${err.message}`;
         showView(error);
       }
-    })();
+    }
+
+    // Fallback: if Clerk doesn't load within 5 seconds, show error
+    setTimeout(() => {
+      if (!window.Clerk) {
+        console.error('Clerk SDK failed to load');
+        errorMessage.textContent = "Authentication service failed to load. Please refresh the page.";
+        showView(error);
+      }
+    }, 5000);
   </script>
 </body>
 </html>
