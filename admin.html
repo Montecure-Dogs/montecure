@@ -128,7 +128,10 @@
       }
 
       // Helpers
-      const displayView = name => ['loading', 'error', 'authenticated', 'unauthenticated'].forEach(v => document.getElementById(`view-${v}`).hidden = v !== name);
+      const displayView = name => ['loading', 'error', 'unauthenticated'].forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.hidden = v !== name;
+      });
       const setTextContent = (id, content) => document.getElementById(id).textContent = content;
 
       (async () => {
