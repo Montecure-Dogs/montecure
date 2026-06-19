@@ -7,6 +7,7 @@
     <title>montecure.dogs - Premium Dog Walking Services</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       tailwind.config = {
         theme: {
@@ -575,7 +576,7 @@
         }
       }
 
-      document.getElementById('multi-step-form').addEventListener('submit', function(e) {
+      document.getElementById('multi-step-form').addEventListener('submit', async function(e) {
         e.preventDefault();
         
         if (!validateStep(3)) {
@@ -588,6 +589,37 @@
         
         const formData = new FormData(this);
         
+        // Initialize Supabase
+        const supabaseUrl = 'https://qjjqifxqzetemzccbzto.supabase.co';
+        const supabaseKey = 'sb_publishable_nwp6LbFlTivlOsH1Zl-ywQ_a145hSZ3';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // Get form data
+        const service = formData.get('service');
+        const walkType = service === 'group' ? 'walk' : service === 'walk-train' ? 'walk' : service === 'day-sit' || service === 'night-sit' ? 'sitting' : 'walk';
+        
+        // Add to Supabase pendingwalks table
+        try {
+          const { error: supabaseError } = await supabase.from('pendingwalks').insert({
+            client_name: formData.get('name'),
+            client_email: formData.get('email'),
+            client_phone: formData.get('phone'),
+            dog_name: formData.get('dog-name'),
+            dog_breed: formData.get('dog-breed'),
+            dog_age: formData.get('dog-age'),
+            walk_type: walkType,
+            special_requirements: formData.get('message'),
+            status: 'pending'
+          });
+          
+          if (supabaseError) {
+            console.error('Supabase error:', supabaseError);
+          }
+        } catch (supabaseErr) {
+          console.error('Supabase insertion failed:', supabaseErr);
+        }
+        
+        // Submit to Formspree
         fetch(this.action, {
           method: 'POST',
           body: formData,
