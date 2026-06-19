@@ -92,7 +92,7 @@
               </div>
               <div class="flex items-center gap-4">
                 <span class="text-sm text-sage-600">Logged in as <span id="user-email" class="font-semibold text-sage-800"></span></span>
-                <button onclick="client.logout({logoutParams:{returnTo:location.origin + '/admin'}})" class="bg-sage-100 text-sage-700 px-4 py-2 rounded-xl hover:bg-sage-200 transition font-semibold text-sm">
+                <button onclick="logout()" class="bg-sage-100 text-sage-700 px-4 py-2 rounded-xl hover:bg-sage-200 transition font-semibold text-sm">
                   <i class="fas fa-sign-out-alt mr-2"></i>Logout
                 </button>
               </div>
@@ -120,8 +120,13 @@
       </div>
     </footer>
 
-    <!-- Install the Auth0 SPA SDK -->
-    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.18/auth0-spa-js.production.js"></script>
+    <!-- Install Clerk SDK -->
+    <script
+      async
+      crossorigin="anonymous"
+      data-clerk-publishable-key="pk_test_dGhhbmtmdWwtc2hhcmstNDguY2xlcmsuYWNjb3VudHMuZGV2JA"
+      src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+    ></script>
 
     <script>
       // Helpers
@@ -130,18 +135,12 @@
 
       (async () => {
         try {
-          // Initialize the Auth0 SDK
-          window.client = await auth0.createAuth0Client({
-            domain: 'dev-vhsyc6nq83pg6edn.us.auth0.com',
-            clientId: 'OotTHzrJb366QVi6fF2Q5XZ7ZqxYeey1',
-            authorizationParams: { redirect_uri: location.origin + '/admin' },
-            cacheLocation: 'localstorage',
-          });
+          // Wait for Clerk to load
+          await window.Clerk.load();
 
           // Check if user is authenticated
-          if (await window.client.isAuthenticated()) {
-            const user = await window.client.getUser();
-            setTextContent("user-email", user.email);
+          if (window.Clerk.user) {
+            setTextContent("user-email", window.Clerk.user.primaryEmailAddress?.emailAddress || window.Clerk.user.emailAddresses[0]?.emailAddress);
             displayView("authenticated");
           } else {
             // Redirect to login page if not authenticated
@@ -153,6 +152,12 @@
           displayView("error");
         }
       })();
+
+      // Logout function
+      async function logout() {
+        await window.Clerk.signOut();
+        location.href = '/admin';
+      }
     </script>
   </body>
 </html>
