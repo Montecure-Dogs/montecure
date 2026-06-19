@@ -6,10 +6,6 @@
     <title>Admin - montecure.dogs</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@calendarjs/ce/dist/style.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/lemonadejs/dist/lemonade.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@calendarjs/ce/dist/index.min.js"></script>
     <script>
       tailwind.config = {
         theme: {
@@ -87,26 +83,6 @@
           </div>
         </div>
 
-        <div id="view-authenticated" class="hidden">
-          <div class="max-w-6xl mx-auto">
-            <div class="flex justify-between items-center mb-8">
-              <div>
-                <h1 class="text-3xl md:text-4xl font-black text-sage-900 mb-2">Your Walks</h1>
-                <p class="text-sage-600">Manage your scheduled dog walks</p>
-              </div>
-              <div class="flex items-center gap-4">
-                <span class="text-sm text-sage-600">Logged in as <span id="user-email" class="font-semibold text-sage-800"></span></span>
-                <button onclick="client.logout({logoutParams:{returnTo:location.origin}})" class="bg-sage-100 text-sage-700 px-4 py-2 rounded-xl hover:bg-sage-200 transition font-semibold text-sm">
-                  <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                </button>
-              </div>
-            </div>
-
-            <div class="bg-white rounded-2xl border border-sage-100 shadow-sm p-6">
-              <div id="calendar"></div>
-            </div>
-          </div>
-        </div>
 
         <div id="view-unauthenticated" class="hidden max-w-md mx-auto">
           <div class="bg-white rounded-2xl border border-sage-100 shadow-sm p-8 text-center">
@@ -162,6 +138,7 @@
             domain: 'dev-vhsyc6nq83pg6edn.us.auth0.com',
             clientId: 'OotTHzrJb366QVi6fF2Q5XZ7ZqxYeey1',
             authorizationParams: { redirect_uri: location.origin + '/admin' },
+          cacheLocation: 'localstorage',
           });
 
           // Handle errors returned by Auth0 after a redirect
@@ -180,18 +157,8 @@
           }
 
           if (await window.client.isAuthenticated()) {
-            const user = await window.client.getUser();
-            setTextContent("user-email", user.email);
-            displayView("authenticated");
-            
-            // Initialize calendar
-            const calendarEl = document.getElementById('calendar');
-            const { Calendar } = calendarjs;
-            Calendar(calendarEl, { 
-              type: 'inline',
-              value: new Date()
-            });
-            
+            // Redirect to admin app
+            location.href = '/admin/app';
             return;
           }
 
