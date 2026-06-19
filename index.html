@@ -52,6 +52,17 @@
       .custom-blur {
         backdrop-filter: blur(12px);
       }
+      
+      /* Custom cursors for desktop */
+      @media (min-width: 768px) {
+        body {
+          cursor: url('/cursors/default.svg') 32 32, auto;
+        }
+        
+        a, button, input, textarea, select, [role="button"], .cursor-pointer {
+          cursor: url('/cursors/handpointing.svg') 32 32, pointer;
+        }
+      }
     </style>
   </head>
   <body class="scroll-smooth bg-stone-50/50 text-sage-900 font-sans antialiased">
