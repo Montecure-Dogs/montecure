@@ -217,6 +217,26 @@
         </div>
       </div>
 
+      <!-- Accept Walk Confirmation Modal -->
+      <div id="accept-confirm-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-4 md:p-8">
+          <div class="text-center">
+            <div class="w-16 h-16 rounded-full bg-terracotta-100 flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-check-circle text-3xl text-terracotta-500"></i>
+            </div>
+            <h2 class="text-xl md:text-2xl font-bold text-sage-900 mb-4">Have you sorted out a date with the client?</h2>
+            <p class="text-sage-600 mb-6 text-sm md:text-base">Ensure you have reached out the client, have sorted out a date, and are ready to receive payment</p>
+            <div class="flex gap-3 md:gap-4">
+              <button id="not-yet-btn" class="flex-1 px-4 md:px-6 py-2 md:py-3 rounded-xl border border-sage-200 text-sage-700 font-semibold hover:bg-sage-50 transition text-sm md:text-base">Not yet</button>
+              <button id="yes-have-btn" class="flex-1 px-4 md:px-6 py-2 md:py-3 rounded-xl bg-terracotta-500 text-white font-semibold hover:bg-terracotta-600 transition text-sm md:text-base" disabled>
+                <span id="yes-have-text">Yes, I have</span>
+                <span id="yes-have-timer" class="hidden"> (5s)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Accept Walk Modal -->
       <div id="accept-walk-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-4 md:p-8">
@@ -313,12 +333,21 @@
     const closeModal = document.getElementById('close-modal');
     const cancelModal = document.getElementById('cancel-modal');
     const newWalkForm = document.getElementById('new-walk-form');
+    const acceptConfirmModal = document.getElementById('accept-confirm-modal');
+    const notYetBtn = document.getElementById('not-yet-btn');
+    const yesHaveBtn = document.getElementById('yes-have-btn');
+    const yesHaveText = document.getElementById('yes-have-text');
+    const yesHaveTimer = document.getElementById('yes-have-timer');
     const acceptWalkModal = document.getElementById('accept-walk-modal');
     const closeAcceptModal = document.getElementById('close-accept-modal');
     const cancelAcceptModal = document.getElementById('cancel-accept-modal');
     const acceptWalkForm = document.getElementById('accept-walk-form');
     const declineWalkModal = document.getElementById('decline-walk-modal');
     const closeDeclineModal = document.getElementById('close-decline-modal');
+
+    // Timer state
+    let acceptTimer = null;
+    let currentPendingWalkId = null;
 
     // Supabase configuration
     const supabaseUrl = 'https://qjjqifxqzetemzccbzto.supabase.co';
@@ -432,6 +461,21 @@
 
     closeDeclineModal.addEventListener('click', () => {
       declineWalkModal.classList.add('hidden');
+    });
+
+    // Confirmation modal handlers
+    notYetBtn.addEventListener('click', () => {
+      clearInterval(acceptTimer);
+      acceptConfirmModal.classList.add('hidden');
+      yesHaveBtn.disabled = false;
+      yesHaveText.classList.remove('hidden');
+      yesHaveTimer.classList.add('hidden');
+    });
+
+    yesHaveBtn.addEventListener('click', () => {
+      clearInterval(acceptTimer);
+      acceptConfirmModal.classList.add('hidden');
+      acceptWalkModal.classList.remove('hidden');
     });
 
     // New walk form submission
@@ -583,9 +627,31 @@
 
     // Open accept modal
     window.openAcceptModal = function(walkId, clientName, dogName, walkType) {
+      currentPendingWalkId = walkId;
       document.getElementById('accept-walk-id').value = walkId;
       document.getElementById('accept-walk-details').textContent = `${clientName} - ${dogName} (${walkType})`;
-      acceptWalkModal.classList.remove('hidden');
+      
+      // Show confirmation modal first
+      acceptConfirmModal.classList.remove('hidden');
+      
+      // Start 5-second timer
+      let countdown = 5;
+      yesHaveBtn.disabled = true;
+      yesHaveText.classList.add('hidden');
+      yesHaveTimer.classList.remove('hidden');
+      yesHaveTimer.textContent = ` (${countdown}s)`;
+      
+      acceptTimer = setInterval(() => {
+        countdown--;
+        yesHaveTimer.textContent = ` (${countdown}s)`;
+        
+        if (countdown <= 0) {
+          clearInterval(acceptTimer);
+          yesHaveBtn.disabled = false;
+          yesHaveText.classList.remove('hidden');
+          yesHaveTimer.classList.add('hidden');
+        }
+      }, 1000);
     };
 
     // Decline walk
