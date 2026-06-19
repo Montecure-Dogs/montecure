@@ -6,6 +6,11 @@
     <title>Admin - montecure.dogs</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.8/main.min.js"></script>
     <script>
       tailwind.config = {
         theme: {
@@ -84,10 +89,10 @@
         </div>
 
         <div id="view-authenticated" class="hidden">
-          <div class="max-w-4xl mx-auto">
+          <div class="max-w-6xl mx-auto">
             <div class="flex justify-between items-center mb-8">
               <div>
-                <h1 class="text-3xl md:text-4xl font-black text-sage-900 mb-2">Upcoming Walks</h1>
+                <h1 class="text-3xl md:text-4xl font-black text-sage-900 mb-2">Your Walks</h1>
                 <p class="text-sage-600">Manage your scheduled dog walks</p>
               </div>
               <div class="flex items-center gap-4">
@@ -98,14 +103,8 @@
               </div>
             </div>
 
-            <div class="bg-white rounded-2xl border border-sage-100 shadow-sm p-8">
-              <div class="text-center py-12">
-                <div class="w-20 h-20 rounded-full bg-sage-100 flex items-center justify-center mx-auto mb-4">
-                  <i class="fas fa-calendar-alt text-3xl text-sage-400"></i>
-                </div>
-                <h3 class="text-xl font-bold text-sage-800 mb-2">No Upcoming Walks</h3>
-                <p class="text-sage-600">You don't have any walks scheduled at the moment.</p>
-              </div>
+            <div class="bg-white rounded-2xl border border-sage-100 shadow-sm p-6">
+              <div id="calendar"></div>
             </div>
           </div>
         </div>
@@ -173,6 +172,28 @@
           const user = await window.client.getUser();
           setTextContent("user-email", user.email);
           displayView("authenticated");
+          
+          // Initialize calendar
+          const calendarEl = document.getElementById('calendar');
+          const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: [],
+            height: 'auto',
+            eventColor: '#B65D39',
+            eventBorderColor: '#A34B2E',
+            eventBackgroundColor: '#B65D39',
+            editable: false,
+            selectable: true,
+            selectMirror: true,
+            dayMaxEvents: true
+          });
+          calendar.render();
+          
           return;
         }
 
