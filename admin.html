@@ -159,6 +159,15 @@
           displayView("error");
         }
       }
+
+      // Fallback: if Clerk doesn't load within 5 seconds, show error
+      setTimeout(() => {
+        if (!window.Clerk) {
+          console.error('Clerk SDK failed to load');
+          setTextContent("error-message", "Authentication service failed to load. Please refresh the page.");
+          displayView("error");
+        }
+      }, 5000);
     </script>
   </body>
 </html>
