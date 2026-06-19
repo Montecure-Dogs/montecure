@@ -84,18 +84,6 @@
         </div>
 
 
-        <div id="view-unauthenticated" class="hidden max-w-md mx-auto">
-          <div class="bg-white rounded-2xl border border-sage-100 shadow-sm p-8 text-center">
-            <div class="w-20 h-20 rounded-full bg-sage-100 flex items-center justify-center mx-auto mb-6">
-              <i class="fas fa-lock text-3xl text-sage-400"></i>
-            </div>
-            <h2 class="text-2xl font-bold text-sage-900 mb-2">Admin Access Required</h2>
-            <p class="text-sage-600 mb-8">Please log in to view and manage your upcoming walks.</p>
-            <button onclick="client.loginWithRedirect()" class="w-full bg-terracotta-500 text-white px-6 py-3 rounded-xl hover:bg-terracotta-600 transition font-bold shadow-md shadow-terracotta-500/10">
-              Login
-            </button>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -128,7 +116,7 @@
       }
 
       // Helpers
-      const displayView = name => ['loading', 'error', 'unauthenticated'].forEach(v => {
+      const displayView = name => ['loading', 'error'].forEach(v => {
         const el = document.getElementById(`view-${v}`);
         if (el) el.hidden = v !== name;
       });
@@ -165,7 +153,8 @@
             return;
           }
 
-          displayView("unauthenticated");
+          // Redirect to Auth0 login
+          await window.client.loginWithRedirect();
         } catch (error) {
           console.error('Authentication error:', error);
           setTextContent("error-message", `An error occurred: ${error.message}`);
