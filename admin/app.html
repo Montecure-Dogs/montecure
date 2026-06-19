@@ -6,6 +6,7 @@
   <title>Admin App - montecure.dogs</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -82,7 +83,7 @@
         <div class="max-w-6xl mx-auto">
           <div class="flex justify-between items-center mb-8">
             <div>
-              <h1 class="text-3xl md:text-4xl font-black text-sage-900 mb-2">Your Walks</h1>
+              <h1 class="text-3xl md:text-4xl font-black text-sage-900 mb-2">Welcome back, Dominic</h1>
               <p class="text-sage-600">Manage your scheduled dog walks</p>
             </div>
             <div class="flex items-center gap-4">
@@ -93,14 +94,187 @@
             </div>
           </div>
 
-          <div class="bg-white rounded-2xl border border-sage-100 shadow-sm p-8">
-            <div class="text-center py-12">
-              <div class="w-20 h-20 rounded-full bg-sage-100 flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-calendar-alt text-3xl text-sage-400"></i>
+          <!-- Tabs -->
+          <div class="flex gap-4 mb-6">
+            <button id="tab-walks" class="px-6 py-3 rounded-xl font-semibold transition bg-terracotta-500 text-white">
+              <i class="fas fa-calendar-alt mr-2"></i>Walks
+            </button>
+            <button id="tab-pending" class="px-6 py-3 rounded-xl font-semibold transition bg-sage-100 text-sage-700 hover:bg-sage-200">
+              <i class="fas fa-clock mr-2"></i>Pending Walks
+            </button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex gap-4 mb-6">
+            <button id="new-walk-btn" class="bg-terracotta-500 text-white px-6 py-3 rounded-xl hover:bg-terracotta-600 transition font-bold">
+              <i class="fas fa-plus mr-2"></i>New Walk
+            </button>
+            <button id="autofill-btn" class="bg-sage-200 text-sage-400 px-6 py-3 rounded-xl font-semibold cursor-not-allowed" disabled>
+              <i class="fas fa-magic mr-2"></i>Auto-fill (Coming Soon)
+            </button>
+          </div>
+
+          <!-- Walks Tab Content -->
+          <div id="walks-content">
+            <div class="bg-white rounded-2xl border border-sage-100 shadow-sm p-8">
+              <div class="flex justify-between items-center mb-6">
+                <button id="prev-month" class="px-4 py-2 rounded-lg bg-sage-100 text-sage-700 hover:bg-sage-200 transition">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <h3 id="current-month" class="text-xl font-bold text-sage-900"></h3>
+                <button id="next-month" class="px-4 py-2 rounded-lg bg-sage-100 text-sage-700 hover:bg-sage-200 transition">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
               </div>
-              <h3 class="text-xl font-bold text-sage-800 mb-2">No Upcoming Walks</h3>
-              <p class="text-sage-600">You don't have any walks scheduled at the moment.</p>
+              <div id="walks-calendar" class="min-h-64">
+                <div class="grid grid-cols-7 gap-2 mb-4">
+                  <div class="text-center text-sm font-semibold text-sage-500">Sun</div>
+                  <div class="text-center text-sm font-semibold text-sage-500">Mon</div>
+                  <div class="text-center text-sm font-semibold text-sage-500">Tue</div>
+                  <div class="text-center text-sm font-semibold text-sage-500">Wed</div>
+                  <div class="text-center text-sm font-semibold text-sage-500">Thu</div>
+                  <div class="text-center text-sm font-semibold text-sage-500">Fri</div>
+                  <div class="text-center text-sm font-semibold text-sage-500">Sat</div>
+                </div>
+                <div id="calendar-days" class="grid grid-cols-7 gap-2"></div>
+              </div>
             </div>
+          </div>
+
+          <!-- Pending Walks Tab Content -->
+          <div id="pending-content" class="hidden">
+            <div class="bg-white rounded-2xl border border-sage-100 shadow-sm p-8">
+              <div id="pending-walks-list" class="min-h-64">
+                <div class="text-center py-12">
+                  <div class="w-20 h-20 rounded-full bg-sage-100 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-inbox text-3xl text-sage-400"></i>
+                  </div>
+                  <h3 class="text-xl font-bold text-sage-800 mb-2">No Pending Walks</h3>
+                  <p class="text-sage-600">You don't have any pending walk requests.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New Walk Modal -->
+      <div id="new-walk-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full mx-4 p-8">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-sage-900">Add New Walk</h2>
+            <button id="close-modal" class="text-sage-400 hover:text-sage-600">
+              <i class="fas fa-times text-xl"></i>
+            </button>
+          </div>
+          <form id="new-walk-form">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-semibold text-sage-700 mb-2">Client Name</label>
+                <input type="text" id="client-name" required class="w-full px-4 py-3 rounded-xl border border-sage-200 focus:border-terracotta-500 focus:ring-2 focus:ring-terracotta-500/20 outline-none transition">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-sage-700 mb-2">Client Email</label>
+                <input type="email" id="client-email" required class="w-full px-4 py-3 rounded-xl border border-sage-200 focus:border-terracotta-500 focus:ring-2 focus:ring-terracotta-500/20 outline-none transition">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-sage-700 mb-2">Client Phone</label>
+                <input type="tel" id="client-phone" class="w-full px-4 py-3 rounded-xl border border-sage-200 focus:border-terracotta-500 focus:ring-2 focus:ring-terracotta-500/20 outline-none transition">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-sage-700 mb-2">Dog Name</label>
+                <input type="text" id="dog-name" required class="w-full px-4 py-3 rounded-xl border border-sage-200 focus:border-terracotta-500 focus:ring-2 focus:ring-terracotta-500/20 outline-none transition">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-sage-700 mb-2">Dog Breed</label>
+                <input type="text" id="dog-breed" class="w-full px-4 py-3 rounded-xl border border-sage-200 focus:border-terracotta-500 focus:ring-2 focus:ring-terracotta-500/20 outline-none transition">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-sage-700 mb-2">Walk Type</label>
+                <select id="walk-type" required class="w-full px-4 py-3 rounded-xl border border-sage-200 focus:border-terracotta-500 focus:ring-2 focus:ring-terracotta-500/20 outline-none transition">
+                  <option value="walk">Walk</option>
+                  <option value="sitting">Pet Sitting</option>
+                  <option value="grooming">Grooming</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-sage-700 mb-2">Scheduled Date</label>
+                <input type="date" id="scheduled-date" required class="w-full px-4 py-3 rounded-xl border border-sage-200 focus:border-terracotta-500 focus:ring-2 focus:ring-terracotta-500/20 outline-none transition">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-sage-700 mb-2">Scheduled Time</label>
+                <input type="time" id="scheduled-time" class="w-full px-4 py-3 rounded-xl border border-sage-200 focus:border-terracotta-500 focus:ring-2 focus:ring-terracotta-500/20 outline-none transition">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-sage-700 mb-2">Special Requirements</label>
+                <textarea id="special-requirements" rows="3" class="w-full px-4 py-3 rounded-xl border border-sage-200 focus:border-terracotta-500 focus:ring-2 focus:ring-terracotta-500/20 outline-none transition"></textarea>
+              </div>
+            </div>
+            <div class="flex gap-4 mt-6">
+              <button type="button" id="cancel-modal" class="flex-1 px-6 py-3 rounded-xl border border-sage-200 text-sage-700 font-semibold hover:bg-sage-50 transition">Cancel</button>
+              <button type="submit" class="flex-1 px-6 py-3 rounded-xl bg-terracotta-500 text-white font-semibold hover:bg-terracotta-600 transition">Add Walk</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Auto-fill Info Modal -->
+      <div id="autofill-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full mx-4 p-8">
+          <div class="text-center">
+            <div class="w-16 h-16 rounded-full bg-sage-100 flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-magic text-2xl text-sage-600"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-sage-900 mb-4">Auto-fill Coming Soon</h2>
+            <p class="text-sage-600 mb-6">You'll be able to automatically add walks from your email once you accept a walk request. This feature will save you time by extracting walk details directly from email confirmations.</p>
+            <button id="close-autofill-modal" class="w-full px-6 py-3 rounded-xl bg-terracotta-500 text-white font-semibold hover:bg-terracotta-600 transition">Got it</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accept Walk Modal -->
+      <div id="accept-walk-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full mx-4 p-8">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-sage-900">Accept Walk & Schedule</h2>
+            <button id="close-accept-modal" class="text-sage-400 hover:text-sage-600">
+              <i class="fas fa-times text-xl"></i>
+            </button>
+          </div>
+          <form id="accept-walk-form">
+            <input type="hidden" id="accept-walk-id">
+            <div class="space-y-4">
+              <div class="bg-sage-50 rounded-xl p-4 mb-4">
+                <h3 class="font-semibold text-sage-900 mb-2">Walk Details</h3>
+                <p id="accept-walk-details" class="text-sm text-sage-600"></p>
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-sage-700 mb-2">Select Date</label>
+                <input type="date" id="accept-date" required class="w-full px-4 py-3 rounded-xl border border-sage-200 focus:border-terracotta-500 focus:ring-2 focus:ring-terracotta-500/20 outline-none transition">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-sage-700 mb-2">Select Time</label>
+                <input type="time" id="accept-time" class="w-full px-4 py-3 rounded-xl border border-sage-200 focus:border-terracotta-500 focus:ring-2 focus:ring-terracotta-500/20 outline-none transition">
+              </div>
+            </div>
+            <div class="flex gap-4 mt-6">
+              <button type="button" id="cancel-accept-modal" class="flex-1 px-6 py-3 rounded-xl border border-sage-200 text-sage-700 font-semibold hover:bg-sage-50 transition">Cancel</button>
+              <button type="submit" class="flex-1 px-6 py-3 rounded-xl bg-terracotta-500 text-white font-semibold hover:bg-terracotta-600 transition">Accept & Schedule</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Decline Walk Modal -->
+      <div id="decline-walk-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-red-50 border-2 border-red-300 rounded-2xl shadow-xl max-w-md w-full mx-4 p-8">
+          <div class="text-center">
+            <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4 animate-pulse">
+              <i class="fas fa-exclamation-triangle text-3xl text-red-500"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-red-800 mb-4">Walk Declined</h2>
+            <p class="text-red-700 mb-6">Make sure to tell your client that you've declined the walk!</p>
+            <button id="close-decline-modal" class="w-full px-6 py-3 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600 transition">Got it</button>
           </div>
         </div>
       </div>
@@ -131,12 +305,335 @@
     const userEmail = document.getElementById('user-email');
     const logoutBtn = document.getElementById('logout-btn');
 
+    // Tab elements
+    const tabWalks = document.getElementById('tab-walks');
+    const tabPending = document.getElementById('tab-pending');
+    const walksContent = document.getElementById('walks-content');
+    const pendingContent = document.getElementById('pending-content');
+
+    // Calendar elements
+    const prevMonthBtn = document.getElementById('prev-month');
+    const nextMonthBtn = document.getElementById('next-month');
+    const currentMonthEl = document.getElementById('current-month');
+    const calendarDaysEl = document.getElementById('calendar-days');
+
+    // Calendar state
+    let currentDate = new Date();
+    let walksData = [];
+
+    // Modal elements
+    const newWalkBtn = document.getElementById('new-walk-btn');
+    const newWalkModal = document.getElementById('new-walk-modal');
+    const closeModal = document.getElementById('close-modal');
+    const cancelModal = document.getElementById('cancel-modal');
+    const newWalkForm = document.getElementById('new-walk-form');
+    const autofillBtn = document.getElementById('autofill-btn');
+    const autofillModal = document.getElementById('autofill-modal');
+    const closeAutofillModal = document.getElementById('close-autofill-modal');
+    const acceptWalkModal = document.getElementById('accept-walk-modal');
+    const closeAcceptModal = document.getElementById('close-accept-modal');
+    const cancelAcceptModal = document.getElementById('cancel-accept-modal');
+    const acceptWalkForm = document.getElementById('accept-walk-form');
+    const declineWalkModal = document.getElementById('decline-walk-modal');
+    const closeDeclineModal = document.getElementById('close-decline-modal');
+
+    // Supabase configuration
+    const supabaseUrl = 'https://qjjqifxqzetemzccbzto.supabase.co';
+    const supabaseKey = 'sb_publishable_nwp6LbFlTivlOsH1Zl-ywQ_a145hSZ3';
+    let SupabaseClient = null;
+
     function showView(view) {
       loading.classList.add('hidden');
       error.classList.add('hidden');
       authenticated.classList.add('hidden');
       view.classList.remove('hidden');
     }
+
+    // Tab switching
+    tabWalks.addEventListener('click', () => {
+      tabWalks.classList.add('bg-terracotta-500', 'text-white');
+      tabWalks.classList.remove('bg-sage-100', 'text-sage-700');
+      tabPending.classList.remove('bg-terracotta-500', 'text-white');
+      tabPending.classList.add('bg-sage-100', 'text-sage-700');
+      walksContent.classList.remove('hidden');
+      pendingContent.classList.add('hidden');
+      loadWalks();
+      renderCalendar();
+    });
+
+    tabPending.addEventListener('click', () => {
+      tabPending.classList.add('bg-terracotta-500', 'text-white');
+      tabPending.classList.remove('bg-sage-100', 'text-sage-700');
+      tabWalks.classList.remove('bg-terracotta-500', 'text-white');
+      tabWalks.classList.add('bg-sage-100', 'text-sage-700');
+      pendingContent.classList.remove('hidden');
+      walksContent.classList.add('hidden');
+      loadPendingWalks();
+    });
+
+    // Calendar navigation
+    prevMonthBtn.addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderCalendar();
+    });
+
+    nextMonthBtn.addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderCalendar();
+    });
+
+    // Render calendar
+    function renderCalendar() {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      
+      currentMonthEl.textContent = new Date(year, month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const today = new Date();
+      
+      let html = '';
+      
+      // Empty cells for days before the first day of the month
+      for (let i = 0; i < firstDay; i++) {
+        html += '<div class="h-20"></div>';
+      }
+      
+      // Days of the month
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const dayWalks = walksData.filter(walk => walk.scheduled_date === dateStr);
+        const isToday = today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
+        
+        html += `
+          <div class="h-20 border border-sage-100 rounded-lg p-1 hover:border-terracotta-300 transition ${isToday ? 'bg-terracotta-50' : ''}">
+            <div class="text-sm font-semibold ${isToday ? 'text-terracotta-600' : 'text-sage-700'}">${day}</div>
+            ${dayWalks.length > 0 ? `
+              <div class="mt-1 space-y-1">
+                ${dayWalks.slice(0, 2).map(walk => `
+                  <div class="text-xs bg-terracotta-100 text-terracotta-700 px-1 py-0.5 rounded truncate">${walk.dog_name}</div>
+                `).join('')}
+                ${dayWalks.length > 2 ? `<div class="text-xs text-sage-500">+${dayWalks.length - 2} more</div>` : ''}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+      
+      calendarDaysEl.innerHTML = html;
+    }
+
+    // Modal handlers
+    newWalkBtn.addEventListener('click', () => {
+      newWalkModal.classList.remove('hidden');
+    });
+
+    closeModal.addEventListener('click', () => {
+      newWalkModal.classList.add('hidden');
+    });
+
+    cancelModal.addEventListener('click', () => {
+      newWalkModal.classList.add('hidden');
+    });
+
+    autofillBtn.addEventListener('click', () => {
+      autofillModal.classList.remove('hidden');
+    });
+
+    closeAutofillModal.addEventListener('click', () => {
+      autofillModal.classList.add('hidden');
+    });
+
+    closeAcceptModal.addEventListener('click', () => {
+      acceptWalkModal.classList.add('hidden');
+    });
+
+    cancelAcceptModal.addEventListener('click', () => {
+      acceptWalkModal.classList.add('hidden');
+    });
+
+    closeDeclineModal.addEventListener('click', () => {
+      declineWalkModal.classList.add('hidden');
+    });
+
+    // New walk form submission
+    newWalkForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const walkData = {
+        client_name: document.getElementById('client-name').value,
+        client_email: document.getElementById('client-email').value,
+        client_phone: document.getElementById('client-phone').value,
+        dog_name: document.getElementById('dog-name').value,
+        dog_breed: document.getElementById('dog-breed').value,
+        walk_type: document.getElementById('walk-type').value,
+        scheduled_date: document.getElementById('scheduled-date').value,
+        scheduled_time: document.getElementById('scheduled-time').value,
+        special_requirements: document.getElementById('special-requirements').value
+      };
+
+      try {
+        const { error } = await SupabaseClient.from('walks').insert(walkData);
+        if (error) throw error;
+        
+        newWalkModal.classList.add('hidden');
+        newWalkForm.reset();
+        loadWalks();
+      } catch (err) {
+        console.error('Error adding walk:', err);
+        alert('Failed to add walk. Please try again.');
+      }
+    });
+
+    // Accept walk form submission
+    acceptWalkForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const pendingWalkId = document.getElementById('accept-walk-id').value;
+      const scheduledDate = document.getElementById('accept-date').value;
+      const scheduledTime = document.getElementById('accept-time').value;
+
+      try {
+        // Get pending walk details
+        const { data: pendingWalk, error: fetchError } = await SupabaseClient
+          .from('pendingwalks')
+          .select('*')
+          .eq('id', pendingWalkId)
+          .single();
+
+        if (fetchError) throw fetchError;
+
+        // Insert into walks table
+        const { error: insertError } = await SupabaseClient.from('walks').insert({
+          pending_walk_id: pendingWalkId,
+          client_name: pendingWalk.client_name,
+          client_email: pendingWalk.client_email,
+          client_phone: pendingWalk.client_phone,
+          dog_name: pendingWalk.dog_name,
+          dog_breed: pendingWalk.dog_breed,
+          dog_age: pendingWalk.dog_age,
+          walk_type: pendingWalk.walk_type,
+          walk_duration: pendingWalk.walk_duration,
+          special_requirements: pendingWalk.special_requirements,
+          scheduled_date: scheduledDate,
+          scheduled_time: scheduledTime,
+          status: 'scheduled'
+        });
+
+        if (insertError) throw insertError;
+
+        // Update pending walk status
+        const { error: updateError } = await SupabaseClient
+          .from('pendingwalks')
+          .update({ status: 'accepted' })
+          .eq('id', pendingWalkId);
+
+        if (updateError) throw updateError;
+
+        acceptWalkModal.classList.add('hidden');
+        acceptWalkForm.reset();
+        loadPendingWalks();
+      } catch (err) {
+        console.error('Error accepting walk:', err);
+        alert('Failed to accept walk. Please try again.');
+      }
+    });
+
+    // Load walks from Supabase
+    async function loadWalks() {
+      try {
+        const { data: walks, error } = await SupabaseClient
+          .from('walks')
+          .select('*')
+          .eq('status', 'scheduled')
+          .order('scheduled_date', { ascending: true });
+
+        if (error) throw error;
+
+        walksData = walks || [];
+        renderCalendar();
+      } catch (err) {
+        console.error('Error loading walks:', err);
+      }
+    }
+
+    // Load pending walks from Supabase
+    async function loadPendingWalks() {
+      try {
+        const { data: pendingWalks, error } = await SupabaseClient
+          .from('pendingwalks')
+          .select('*')
+          .eq('status', 'pending')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        const pendingWalksList = document.getElementById('pending-walks-list');
+        
+        if (pendingWalks && pendingWalks.length > 0) {
+          pendingWalksList.innerHTML = pendingWalks.map(walk => `
+            <div class="border border-sage-200 rounded-xl p-4 mb-4 hover:border-terracotta-300 transition">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h4 class="font-semibold text-sage-900">${walk.dog_name} - ${walk.walk_type}</h4>
+                  <p class="text-sm text-sage-600">${walk.client_name} (${walk.client_email})</p>
+                  <p class="text-sm text-sage-500">${walk.client_phone || 'No phone'}</p>
+                  ${walk.special_requirements ? `<p class="text-sm text-sage-500 mt-2">${walk.special_requirements}</p>` : ''}
+                </div>
+                <div class="flex gap-2">
+                  <button onclick="openAcceptModal('${walk.id}', '${walk.client_name}', '${walk.dog_name}', '${walk.walk_type}')" class="px-4 py-2 rounded-lg bg-terracotta-500 text-white text-sm font-semibold hover:bg-terracotta-600 transition">Accept</button>
+                  <button onclick="declineWalk('${walk.id}')" class="px-4 py-2 rounded-lg bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition">Decline</button>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        } else {
+          pendingWalksList.innerHTML = `
+            <div class="text-center py-12">
+              <div class="w-20 h-20 rounded-full bg-sage-100 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-inbox text-3xl text-sage-400"></i>
+              </div>
+              <h3 class="text-xl font-bold text-sage-800 mb-2">No Pending Walks</h3>
+              <p class="text-sage-600">You don't have any pending walk requests.</p>
+            </div>
+          `;
+        }
+      } catch (err) {
+        console.error('Error loading pending walks:', err);
+      }
+    }
+
+    // Open accept modal
+    window.openAcceptModal = function(walkId, clientName, dogName, walkType) {
+      document.getElementById('accept-walk-id').value = walkId;
+      document.getElementById('accept-walk-details').textContent = `${clientName} - ${dogName} (${walkType})`;
+      acceptWalkModal.classList.remove('hidden');
+    };
+
+    // Decline walk
+    window.declineWalk = async function(walkId) {
+      try {
+        const { error } = await SupabaseClient
+          .from('pendingwalks')
+          .update({ status: 'declined' })
+          .eq('id', walkId);
+
+        if (error) throw error;
+
+        // Vibrate device 3 times if supported
+        if (navigator.vibrate) {
+          navigator.vibrate([200, 100, 200, 100, 200]);
+        }
+
+        // Show decline modal
+        declineWalkModal.classList.remove('hidden');
+        loadPendingWalks();
+      } catch (err) {
+        console.error('Error declining walk:', err);
+        alert('Failed to decline walk. Please try again.');
+      }
+    };
 
     logoutBtn.addEventListener('click', async () => {
       if (window.Clerk) {
@@ -152,6 +649,12 @@
         if (window.Clerk.user) {
           userEmail.textContent = window.Clerk.user.primaryEmailAddress?.emailAddress || window.Clerk.user.emailAddresses[0]?.emailAddress;
           showView(authenticated);
+          
+          // Initialize Supabase
+          SupabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+          
+          // Load initial data
+          loadWalks();
         } else {
           location.href = '/admin';
         }
