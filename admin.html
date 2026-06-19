@@ -1,181 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin - montecure.dogs</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              sage: {
-                50: '#F5F6F5',
-                100: '#E6E9E6',
-                200: '#CDD3CE',
-                300: '#A9B3AA',
-                400: '#819083',
-                500: '#647466',
-                600: '#4E5C50',
-                700: '#404B42',
-                800: '#353E36',
-                900: '#2E352F',
-              },
-              terracotta: {
-                50: '#FAF4F0',
-                100: '#F3E5DC',
-                200: '#E6C6B3',
-                300: '#D59F81',
-                400: '#C27552',
-                500: '#B65D39',
-                600: '#A34B2E',
-                700: '#873C27',
-                800: '#6E3222',
-                900: '#5A2A1E',
-              }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - montecure.dogs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sage: {
+              50: '#F5F6F5',
+              100: '#E6E9E6',
+              200: '#CDD3CE',
+              300: '#A9B3AA',
+              400: '#819083',
+              500: '#647466',
+              600: '#4E5C50',
+              700: '#404B42',
+              800: '#353E36',
+              900: '#2E352F',
+            },
+            terracotta: {
+              50: '#FAF4F0',
+              100: '#F3E5DC',
+              200: '#E6C6B3',
+              300: '#D59F81',
+              400: '#C27552',
+              500: '#B65D39',
+              600: '#A34B2E',
+              700: '#873C27',
+              800: '#6E3222',
+              900: '#5A2A1E',
             }
           }
         }
       }
-    </script>
-    <style>
-      .custom-blur {
-        backdrop-filter: blur(12px);
-      }
-    </style>
-  </head>
-  <body class="bg-stone-50/50 text-sage-900 font-sans antialiased">
-    <nav class="fixed w-full bg-white/80 custom-blur border-b border-sage-100 z-40 transition-all duration-300">
-      <div class="container mx-auto px-6">
-        <div class="flex justify-between items-center py-5">
-          <div class="flex items-center space-x-3 group cursor-pointer">
-            <div class="w-10 h-10 rounded-xl bg-sage-600 flex items-center justify-center text-white shadow-md shadow-sage-600/10 transition-transform duration-300 group-hover:scale-105">
-              <i class="fas fa-dog text-lg text-terracotta-200"></i>
-            </div>
-            <span class="text-2xl font-black tracking-tight text-sage-800">montecure<span class="text-terracotta-500">.dogs</span></span>
+    }
+  </script>
+</head>
+<body class="bg-stone-50 text-sage-900 font-sans">
+  <nav class="fixed w-full bg-white border-b border-sage-100 z-40">
+    <div class="container mx-auto px-6">
+      <div class="flex justify-between items-center py-5">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-sage-600 flex items-center justify-center text-white">
+            <i class="fas fa-dog text-lg text-terracotta-200"></i>
           </div>
-          <div class="hidden md:flex items-center space-x-8">
-            <a href="/" class="text-sage-600 hover:text-terracotta-600 font-semibold tracking-wide transition duration-200">Home</a>
-            <a href="/admin" class="text-terracotta-600 font-semibold tracking-wide transition duration-200">Admin</a>
-          </div>
+          <span class="text-2xl font-black text-sage-800">montecure<span class="text-terracotta-500">.dogs</span></span>
         </div>
-      </div>
-    </nav>
-
-    <div class="pt-32 pb-24 min-h-screen">
-      <div class="container mx-auto px-6">
-        <div id="view-loading" class="text-center py-20">
-          <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-sage-100 mb-4">
-            <i class="fas fa-spinner fa-spin text-2xl text-sage-600"></i>
-          </div>
-          <p class="text-sage-600 text-lg">Loading...</p>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="/" class="text-sage-600 hover:text-terracotta-600 font-semibold">Home</a>
+          <a href="/admin" class="text-terracotta-600 font-semibold">Admin</a>
         </div>
-
-        <div id="view-error" class="hidden max-w-2xl mx-auto">
-          <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-8 text-center">
-            <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
-              <i class="fas fa-exclamation-triangle text-2xl text-red-500"></i>
-            </div>
-            <h2 class="text-2xl font-bold text-red-800 mb-2">Authentication Error</h2>
-            <p id="error-message" class="text-red-600"></p>
-          </div>
-        </div>
-
-        <div id="view-unauthenticated" class="hidden max-w-md mx-auto">
-          <div class="bg-white rounded-2xl border border-sage-100 shadow-sm p-8 text-center">
-            <div class="w-20 h-20 rounded-full bg-sage-100 flex items-center justify-center mx-auto mb-6">
-              <i class="fas fa-lock text-3xl text-sage-400"></i>
-            </div>
-            <h2 class="text-2xl font-bold text-sage-900 mb-2">Admin Access Required</h2>
-            <p class="text-sage-600 mb-8">Please log in to view and manage your upcoming walks.</p>
-            <button onclick="window.Clerk.redirectToSignIn()" class="w-full bg-terracotta-500 text-white px-6 py-3 rounded-xl hover:bg-terracotta-600 transition font-bold shadow-md shadow-terracotta-500/10">
-              Login
-            </button>
-          </div>
-        </div>
-
       </div>
     </div>
+  </nav>
 
-    <footer class="bg-sage-900 text-white py-12">
-      <div class="container mx-auto px-6">
-        <div class="text-center text-xs text-sage-500 space-y-2">
-          <p>© 2026 montecure.dogs. All rights reserved.</p>
-          <a href="#" onclick="resetSession(); return false;" class="text-sage-400 hover:text-terracotta-400 underline">Reset Session</a>
+  <div class="pt-32 pb-24 min-h-screen">
+    <div class="container mx-auto px-6">
+      <div id="loading" class="text-center py-20">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-sage-100 mb-4">
+          <i class="fas fa-spinner fa-spin text-2xl text-sage-600"></i>
+        </div>
+        <p class="text-sage-600 text-lg">Loading...</p>
+      </div>
+
+      <div id="error" class="hidden max-w-2xl mx-auto">
+        <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-8 text-center">
+          <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-exclamation-triangle text-2xl text-red-500"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-red-800 mb-2">Authentication Error</h2>
+          <p id="error-message" class="text-red-600"></p>
         </div>
       </div>
-    </footer>
 
-    <!-- Install Clerk SDK -->
-    <script
-      async
-      crossorigin="anonymous"
-      data-clerk-publishable-key="pk_test_dGhhbmtmdWwtc2hhcmstNDguY2xlcmsuYWNjb3VudHMuZGV2JA"
-      src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
-      onload="initClerk()"
-      onerror="handleClerkError()"
-    ></script>
+      <div id="unauthenticated" class="hidden max-w-md mx-auto">
+        <div class="bg-white rounded-2xl border border-sage-100 shadow-sm p-8 text-center">
+          <div class="w-20 h-20 rounded-full bg-sage-100 flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-lock text-3xl text-sage-400"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-sage-900 mb-2">Admin Access Required</h2>
+          <p class="text-sage-600 mb-8">Please log in to view and manage your upcoming walks.</p>
+          <button id="login-btn" class="w-full bg-terracotta-500 text-white px-6 py-3 rounded-xl hover:bg-terracotta-600 transition font-bold">
+            Login
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <script>
-      // Reset session function
-      function resetSession() {
-        // Clear all storage
-        localStorage.clear();
-        sessionStorage.clear();
-        
-        // Clear cookies by setting them to expire
-        document.cookie.split(";").forEach(function(c) { 
-          document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
-        });
-        
-        // Reload the page
-        location.reload();
-      }
+  <footer class="bg-sage-900 text-white py-12">
+    <div class="container mx-auto px-6">
+      <div class="text-center text-xs text-sage-500 space-y-2">
+        <p>© 2026 montecure.dogs. All rights reserved.</p>
+        <a href="#" id="reset-session" class="text-sage-400 hover:text-terracotta-400 underline">Reset Session</a>
+      </div>
+    </div>
+  </footer>
 
-      // Handle Clerk SDK loading error
-      function handleClerkError() {
-        console.error('Clerk SDK failed to load');
-        setTextContent("error-message", "Authentication service failed to load. Please refresh the page.");
-        displayView("error");
-      }
+  <script
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_dGhhbmtmdWwtc2hhcmstNDguY2xlcmsuYWNjb3VudHMuZGV2JA"
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+  ></script>
 
-      // Helpers
-      const displayView = name => ['loading', 'error', 'unauthenticated'].forEach(v => {
-        const el = document.getElementById(`view-${v}`);
-        if (el) el.hidden = v !== name;
+  <script>
+    const loading = document.getElementById('loading');
+    const error = document.getElementById('error');
+    const unauthenticated = document.getElementById('unauthenticated');
+    const errorMessage = document.getElementById('error-message');
+    const loginBtn = document.getElementById('login-btn');
+    const resetSessionBtn = document.getElementById('reset-session');
+
+    function showView(view) {
+      loading.classList.add('hidden');
+      error.classList.add('hidden');
+      unauthenticated.classList.add('hidden');
+      view.classList.remove('hidden');
+    }
+
+    function resetSession() {
+      localStorage.clear();
+      sessionStorage.clear();
+      document.cookie.split(";").forEach(function(c) {
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
       });
-      const setTextContent = (id, content) => document.getElementById(id).textContent = content;
+      location.reload();
+    }
 
-      async function initClerk() {
-        try {
-          // Wait for Clerk to load
-          await window.Clerk.load();
+    resetSessionBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      resetSession();
+    });
 
-          if (window.Clerk.user) {
-            // Redirect to admin app
-            location.href = '/admin/app';
-            return;
-          }
-
-          // Show unauthenticated view with login button
-          displayView("unauthenticated");
-        } catch (error) {
-          console.error('Authentication error:', error);
-          setTextContent("error-message", `An error occurred: ${error.message}`);
-          displayView("error");
-        }
+    loginBtn.addEventListener('click', () => {
+      if (window.Clerk) {
+        window.Clerk.redirectToSignIn();
       }
+    });
 
-      // Fallback: if Clerk doesn't load within 5 seconds, show error
-      setTimeout(() => {
-        if (!window.Clerk) {
-          console.error('Clerk SDK failed to load');
-          setTextContent("error-message", "Authentication service failed to load. Please refresh the page.");
-          displayView("error");
+    (async () => {
+      try {
+        await window.Clerk.load();
+
+        if (window.Clerk.user) {
+          location.href = '/admin/app';
+          return;
         }
-      }, 5000);
-    </script>
-  </body>
+
+        showView(unauthenticated);
+      } catch (err) {
+        console.error('Authentication error:', err);
+        errorMessage.textContent = `An error occurred: ${err.message}`;
+        showView(error);
+      }
+    })();
+  </script>
+</body>
 </html>
