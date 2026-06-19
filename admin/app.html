@@ -97,11 +97,17 @@
           <!-- Tabs -->
           <div class="border-b border-sage-200 mb-4 md:mb-6">
             <div class="flex gap-2 md:gap-4">
-              <button id="tab-walks" class="px-4 md:px-6 py-2 md:py-3 font-semibold transition border-b-2 border-terracotta-500 text-terracotta-600 text-sm md:text-base">
-                <i class="fas fa-calendar-alt mr-1 md:mr-2"></i>Walks
+              <button id="tab-today" class="px-4 md:px-6 py-2 md:py-3 font-semibold transition border-b-2 border-transparent text-sage-500 hover:text-sage-700 text-sm md:text-base">
+                <i class="fas fa-sun mr-1 md:mr-2"></i>Today
+              </button>
+              <button id="tab-calendar" class="px-4 md:px-6 py-2 md:py-3 font-semibold transition border-b-2 border-terracotta-500 text-terracotta-600 text-sm md:text-base">
+                <i class="fas fa-calendar-alt mr-1 md:mr-2"></i>Calendar
               </button>
               <button id="tab-pending" class="px-4 md:px-6 py-2 md:py-3 font-semibold transition border-b-2 border-transparent text-sage-500 hover:text-sage-700 text-sm md:text-base">
                 <i class="fas fa-clock mr-1 md:mr-2"></i>Pending Walks
+              </button>
+              <button id="tab-other" class="px-4 md:px-6 py-2 md:py-3 font-semibold transition border-b-2 border-transparent text-sage-500 hover:text-sage-700 text-sm md:text-base">
+                <i class="fas fa-star mr-1 md:mr-2"></i>Other
               </button>
             </div>
           </div>
@@ -113,8 +119,23 @@
             </button>
           </div>
 
-          <!-- Walks Tab Content -->
-          <div id="walks-content">
+          <!-- Today Tab Content -->
+          <div id="today-content" class="hidden">
+            <div class="bg-white rounded-2xl border border-sage-100 shadow-sm p-4 md:p-8">
+              <div id="today-walks-list" class="min-h-64">
+                <div class="text-center py-8 md:py-12">
+                  <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-sage-100 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-sun text-2xl md:text-3xl text-sage-400"></i>
+                  </div>
+                  <h3 class="text-lg md:text-xl font-bold text-sage-800 mb-2">No Walks Today</h3>
+                  <p class="text-sage-600 text-sm md:text-base">You don't have any walks scheduled for today.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calendar Tab Content -->
+          <div id="calendar-content" class="hidden">
             <div class="bg-white rounded-2xl border border-sage-100 shadow-sm p-4 md:p-8">
               <div class="flex justify-between items-center mb-4 md:mb-6">
                 <button id="prev-month" class="px-3 md:px-4 py-2 rounded-lg bg-sage-100 text-sage-700 hover:bg-sage-200 transition text-sm md:text-base">
@@ -150,6 +171,21 @@
                   </div>
                   <h3 class="text-lg md:text-xl font-bold text-sage-800 mb-2">No Pending Walks</h3>
                   <p class="text-sage-600 text-sm md:text-base">You don't have any pending walk requests.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Other Tab Content -->
+          <div id="other-content" class="hidden">
+            <div class="bg-white rounded-2xl border border-sage-100 shadow-sm p-4 md:p-8">
+              <div id="other-walks-list" class="min-h-64">
+                <div class="text-center py-8 md:py-12">
+                  <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-sage-100 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-star text-2xl md:text-3xl text-sage-400"></i>
+                  </div>
+                  <h3 class="text-lg md:text-xl font-bold text-sage-800 mb-2">No Other Walks</h3>
+                  <p class="text-sage-600 text-sm md:text-base">You don't have any other or block booking walks.</p>
                 </div>
               </div>
             </div>
@@ -270,6 +306,27 @@
         </div>
       </div>
 
+      <!-- Decline Walk Confirmation Modal -->
+      <div id="decline-confirm-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-4 md:p-8">
+          <div class="text-center">
+            <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-exclamation-triangle text-3xl text-red-500"></i>
+            </div>
+            <h2 class="text-xl md:text-2xl font-bold text-sage-900 mb-4">Decline Walk?</h2>
+            <p class="text-sage-600 mb-2 text-sm md:text-base">This action is permanent and cannot be undone.</p>
+            <p class="text-sage-600 mb-6 text-sm md:text-base">Make sure to tell your client that you've declined the walk!</p>
+            <div class="flex gap-3 md:gap-4">
+              <button id="cancel-decline-confirm-btn" class="flex-1 px-4 md:px-6 py-2 md:py-3 rounded-xl border border-sage-200 text-sage-700 font-semibold hover:bg-sage-50 transition text-sm md:text-base">Cancel</button>
+              <button id="confirm-decline-btn" class="flex-1 px-4 md:px-6 py-2 md:py-3 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600 transition text-sm md:text-base" disabled>
+                <span id="confirm-decline-text">Decline</span>
+                <span id="confirm-decline-timer" class="hidden"> (5s)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Decline Walk Modal -->
       <div id="decline-walk-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
         <div class="bg-red-50 border-2 border-red-300 rounded-2xl shadow-xl max-w-md w-full p-4 md:p-8">
@@ -280,6 +337,23 @@
             <h2 class="text-xl md:text-2xl font-bold text-red-800 mb-4">Walk Declined</h2>
             <p class="text-red-700 mb-6 text-sm md:text-base">Make sure to tell your client that you've declined the walk!</p>
             <button id="close-decline-modal" class="w-full px-4 md:px-6 py-2 md:py-3 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600 transition text-sm md:text-base">Got it</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Walk Confirmation Modal -->
+      <div id="delete-walk-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-4 md:p-8">
+          <div class="text-center">
+            <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-trash-alt text-2xl md:text-3xl text-red-500"></i>
+            </div>
+            <h2 class="text-xl md:text-2xl font-bold text-sage-900 mb-4">Remove Walk?</h2>
+            <p class="text-sage-600 mb-6 text-sm md:text-base">Are you sure you want to remove this walk? This action cannot be undone.</p>
+            <div class="flex gap-3 md:gap-4">
+              <button id="cancel-delete-modal" class="flex-1 px-4 md:px-6 py-2 md:py-3 rounded-xl border border-sage-200 text-sage-700 font-semibold hover:bg-sage-50 transition text-sm md:text-base">Cancel</button>
+              <button id="confirm-delete-modal" class="flex-1 px-4 md:px-6 py-2 md:py-3 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600 transition text-sm md:text-base">Remove</button>
+            </div>
           </div>
         </div>
       </div>
@@ -311,10 +385,14 @@
     const logoutBtn = document.getElementById('logout-btn');
 
     // Tab elements
-    const tabWalks = document.getElementById('tab-walks');
+    const tabToday = document.getElementById('tab-today');
+    const tabCalendar = document.getElementById('tab-calendar');
     const tabPending = document.getElementById('tab-pending');
-    const walksContent = document.getElementById('walks-content');
+    const tabOther = document.getElementById('tab-other');
+    const todayContent = document.getElementById('today-content');
+    const calendarContent = document.getElementById('calendar-content');
     const pendingContent = document.getElementById('pending-content');
+    const otherContent = document.getElementById('other-content');
     const walksActions = document.getElementById('walks-actions');
 
     // Calendar elements
@@ -344,10 +422,20 @@
     const acceptWalkForm = document.getElementById('accept-walk-form');
     const declineWalkModal = document.getElementById('decline-walk-modal');
     const closeDeclineModal = document.getElementById('close-decline-modal');
+    const declineConfirmModal = document.getElementById('decline-confirm-modal');
+    const cancelDeclineConfirmBtn = document.getElementById('cancel-decline-confirm-btn');
+    const confirmDeclineBtn = document.getElementById('confirm-decline-btn');
+    const confirmDeclineText = document.getElementById('confirm-decline-text');
+    const confirmDeclineTimer = document.getElementById('confirm-decline-timer');
+    const deleteWalkModal = document.getElementById('delete-walk-modal');
+    const cancelDeleteModal = document.getElementById('cancel-delete-modal');
+    const confirmDeleteModal = document.getElementById('confirm-delete-modal');
 
     // Timer state
     let acceptTimer = null;
+    let declineTimer = null;
     let currentPendingWalkId = null;
+    let currentWalkToDelete = null;
 
     // Supabase configuration
     const supabaseUrl = 'https://qjjqifxqzetemzccbzto.supabase.co';
@@ -362,13 +450,36 @@
     }
 
     // Tab switching
-    tabWalks.addEventListener('click', () => {
-      tabWalks.classList.add('border-terracotta-500', 'text-terracotta-600');
-      tabWalks.classList.remove('border-transparent', 'text-sage-500');
+    tabToday.addEventListener('click', () => {
+      tabToday.classList.add('border-terracotta-500', 'text-terracotta-600');
+      tabToday.classList.remove('border-transparent', 'text-sage-500');
+      tabCalendar.classList.remove('border-terracotta-500', 'text-terracotta-600');
+      tabCalendar.classList.add('border-transparent', 'text-sage-500');
       tabPending.classList.remove('border-terracotta-500', 'text-terracotta-600');
       tabPending.classList.add('border-transparent', 'text-sage-500');
-      walksContent.classList.remove('hidden');
+      tabOther.classList.remove('border-terracotta-500', 'text-terracotta-600');
+      tabOther.classList.add('border-transparent', 'text-sage-500');
+      todayContent.classList.remove('hidden');
+      calendarContent.classList.add('hidden');
       pendingContent.classList.add('hidden');
+      otherContent.classList.add('hidden');
+      walksActions.classList.add('hidden');
+      loadTodayWalks();
+    });
+
+    tabCalendar.addEventListener('click', () => {
+      tabCalendar.classList.add('border-terracotta-500', 'text-terracotta-600');
+      tabCalendar.classList.remove('border-transparent', 'text-sage-500');
+      tabToday.classList.remove('border-terracotta-500', 'text-terracotta-600');
+      tabToday.classList.add('border-transparent', 'text-sage-500');
+      tabPending.classList.remove('border-terracotta-500', 'text-terracotta-600');
+      tabPending.classList.add('border-transparent', 'text-sage-500');
+      tabOther.classList.remove('border-terracotta-500', 'text-terracotta-600');
+      tabOther.classList.add('border-transparent', 'text-sage-500');
+      calendarContent.classList.remove('hidden');
+      todayContent.classList.add('hidden');
+      pendingContent.classList.add('hidden');
+      otherContent.classList.add('hidden');
       walksActions.classList.remove('hidden');
       loadWalks();
       renderCalendar();
@@ -377,12 +488,35 @@
     tabPending.addEventListener('click', () => {
       tabPending.classList.add('border-terracotta-500', 'text-terracotta-600');
       tabPending.classList.remove('border-transparent', 'text-sage-500');
-      tabWalks.classList.remove('border-terracotta-500', 'text-terracotta-600');
-      tabWalks.classList.add('border-transparent', 'text-sage-500');
+      tabToday.classList.remove('border-terracotta-500', 'text-terracotta-600');
+      tabToday.classList.add('border-transparent', 'text-sage-500');
+      tabCalendar.classList.remove('border-terracotta-500', 'text-terracotta-600');
+      tabCalendar.classList.add('border-transparent', 'text-sage-500');
+      tabOther.classList.remove('border-terracotta-500', 'text-terracotta-600');
+      tabOther.classList.add('border-transparent', 'text-sage-500');
       pendingContent.classList.remove('hidden');
-      walksContent.classList.add('hidden');
+      todayContent.classList.add('hidden');
+      calendarContent.classList.add('hidden');
+      otherContent.classList.add('hidden');
       walksActions.classList.add('hidden');
       loadPendingWalks();
+    });
+
+    tabOther.addEventListener('click', () => {
+      tabOther.classList.add('border-terracotta-500', 'text-terracotta-600');
+      tabOther.classList.remove('border-transparent', 'text-sage-500');
+      tabToday.classList.remove('border-terracotta-500', 'text-terracotta-600');
+      tabToday.classList.add('border-transparent', 'text-sage-500');
+      tabCalendar.classList.remove('border-terracotta-500', 'text-terracotta-600');
+      tabCalendar.classList.add('border-transparent', 'text-sage-500');
+      tabPending.classList.remove('border-terracotta-500', 'text-terracotta-600');
+      tabPending.classList.add('border-transparent', 'text-sage-500');
+      otherContent.classList.remove('hidden');
+      todayContent.classList.add('hidden');
+      calendarContent.classList.add('hidden');
+      pendingContent.classList.add('hidden');
+      walksActions.classList.add('hidden');
+      loadOtherWalks();
     });
 
     // Calendar navigation
@@ -411,7 +545,7 @@
       
       // Empty cells for days before the first day of the month
       for (let i = 0; i < firstDay; i++) {
-        html += '<div class="h-12 md:h-20"></div>';
+        html += '<div class="h-16 md:h-24"></div>';
       }
       
       // Days of the month
@@ -420,15 +554,41 @@
         const dayWalks = walksData.filter(walk => walk.scheduled_date === dateStr);
         const isToday = today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
         
+        // Color coding for walk types
+        const getWalkTypeColor = (type) => {
+          switch(type) {
+            case 'walk': return 'bg-terracotta-100 text-terracotta-700';
+            case 'sitting': return 'bg-blue-100 text-blue-700';
+            case 'grooming': return 'bg-purple-100 text-purple-700';
+            default: return 'bg-sage-100 text-sage-700';
+          }
+        };
+        
+        const getWalkTypeIcon = (type) => {
+          switch(type) {
+            case 'walk': return 'fa-walking';
+            case 'sitting': return 'fa-home';
+            case 'grooming': return 'fa-cut';
+            default: return 'fa-paw';
+          }
+        };
+        
         html += `
-          <div class="h-12 md:h-20 border border-sage-100 rounded-lg p-1 md:p-1 hover:border-terracotta-300 transition ${isToday ? 'bg-terracotta-50' : ''}">
+          <div class="h-16 md:h-24 border border-sage-100 rounded-lg p-1 md:p-2 hover:border-terracotta-300 transition ${isToday ? 'bg-terracotta-50' : ''}">
             <div class="text-xs md:text-sm font-semibold ${isToday ? 'text-terracotta-600' : 'text-sage-700'}">${day}</div>
             ${dayWalks.length > 0 ? `
-              <div class="mt-0.5 md:mt-1 space-y-0.5 md:space-y-1">
-                ${dayWalks.slice(0, 2).map(walk => `
-                  <div class="text-[10px] md:text-xs bg-terracotta-100 text-terracotta-700 px-0.5 md:px-1 py-0.5 rounded truncate">${walk.dog_name}</div>
+              <div class="mt-1 space-y-1">
+                ${dayWalks.slice(0, 3).map(walk => `
+                  <div class="text-[9px] md:text-xs ${getWalkTypeColor(walk.walk_type)} px-1 py-0.5 rounded flex items-center gap-1 group">
+                    <i class="fas ${getWalkTypeIcon(walk.walk_type)} text-[8px] md:text-[10px]"></i>
+                    <span class="truncate flex-1">${walk.dog_name}</span>
+                    ${walk.scheduled_time ? `<span class="text-[8px] md:text-[10px] opacity-75">${walk.scheduled_time}</span>` : ''}
+                    <button onclick="openDeleteModal('${walk.id}')" class="text-red-500 hover:text-red-700 ml-1 opacity-0 group-hover:opacity-100 transition">
+                      <i class="fas fa-times text-[8px] md:text-[10px]"></i>
+                    </button>
+                  </div>
                 `).join('')}
-                ${dayWalks.length > 2 ? `<div class="text-[10px] md:text-xs text-sage-500">+${dayWalks.length - 2} more</div>` : ''}
+                ${dayWalks.length > 3 ? `<div class="text-[9px] md:text-xs text-sage-500">+${dayWalks.length - 3} more</div>` : ''}
               </div>
             ` : ''}
           </div>
@@ -461,6 +621,71 @@
 
     closeDeclineModal.addEventListener('click', () => {
       declineWalkModal.classList.add('hidden');
+    });
+
+    // Decline confirmation modal handlers
+    cancelDeclineConfirmBtn.addEventListener('click', () => {
+      clearInterval(declineTimer);
+      declineConfirmModal.classList.add('hidden');
+      confirmDeclineBtn.disabled = false;
+      confirmDeclineText.classList.remove('hidden');
+      confirmDeclineTimer.classList.add('hidden');
+    });
+
+    confirmDeclineBtn.addEventListener('click', async () => {
+      if (currentPendingWalkId) {
+        try {
+          const { error } = await SupabaseClient
+            .from('pendingwalks')
+            .update({ status: 'declined' })
+            .eq('id', currentPendingWalkId);
+
+          if (error) throw error;
+
+          // Vibrate device 3 times if supported (vibrate 200ms, pause 100ms, repeat 3 times)
+          if ('vibrate' in navigator) {
+            try {
+              navigator.vibrate([200, 100, 200, 100, 200]);
+            } catch (vibrateError) {
+              console.warn('Vibration failed:', vibrateError);
+            }
+          }
+
+          // Show decline modal
+          declineConfirmModal.classList.add('hidden');
+          declineWalkModal.classList.remove('hidden');
+          loadPendingWalks();
+        } catch (err) {
+          console.error('Error declining walk:', err);
+          alert('Failed to decline walk. Please try again.');
+        }
+      }
+    });
+
+    // Delete modal handlers
+    cancelDeleteModal.addEventListener('click', () => {
+      deleteWalkModal.classList.add('hidden');
+      currentWalkToDelete = null;
+    });
+
+    confirmDeleteModal.addEventListener('click', async () => {
+      if (currentWalkToDelete) {
+        try {
+          const { error } = await SupabaseClient
+            .from('walks')
+            .delete()
+            .eq('id', currentWalkToDelete);
+
+          if (error) throw error;
+
+          deleteWalkModal.classList.add('hidden');
+          currentWalkToDelete = null;
+          loadWalks();
+        } catch (err) {
+          console.error('Error deleting walk:', err);
+          alert('Failed to delete walk. Please try again.');
+        }
+      }
     });
 
     // Confirmation modal handlers
@@ -579,6 +804,149 @@
       }
     }
 
+    // Load today's walks from Supabase
+    async function loadTodayWalks() {
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const { data: todayWalks, error } = await SupabaseClient
+          .from('walks')
+          .select('*')
+          .eq('scheduled_date', today)
+          .eq('status', 'scheduled')
+          .order('scheduled_time', { ascending: true });
+
+        if (error) throw error;
+
+        const todayWalksList = document.getElementById('today-walks-list');
+        
+        if (todayWalks && todayWalks.length > 0) {
+          todayWalksList.innerHTML = todayWalks.map(walk => {
+            // Get walk type styling
+            const getWalkTypeColor = (type) => {
+              switch(type) {
+                case 'walk': return 'bg-terracotta-100 text-terracotta-700';
+                case 'sitting': return 'bg-blue-100 text-blue-700';
+                case 'grooming': return 'bg-purple-100 text-purple-700';
+                case 'other': return 'bg-purple-100 text-purple-700';
+                case 'Block Booking': return 'bg-indigo-100 text-indigo-700';
+                default: return 'bg-sage-100 text-sage-700';
+              }
+            };
+            
+            const getWalkTypeIcon = (type) => {
+              switch(type) {
+                case 'walk': return 'fa-walking';
+                case 'sitting': return 'fa-home';
+                case 'grooming': return 'fa-cut';
+                case 'other': return 'fa-star';
+                case 'Block Booking': return 'fa-calendar-check';
+                default: return 'fa-paw';
+              }
+            };
+            
+            return `
+            <div class="border border-sage-200 rounded-xl p-3 md:p-4 mb-3 md:mb-4 hover:border-terracotta-300 transition">
+              <div class="flex flex-col md:flex-row justify-between items-start gap-3 md:gap-0">
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-2">
+                    <h4 class="font-semibold text-sage-900 text-sm md:text-base">${walk.dog_name}</h4>
+                    <span class="text-xs md:text-sm px-2 py-1 rounded-full ${getWalkTypeColor(walk.walk_type)}">
+                      <i class="fas ${getWalkTypeIcon(walk.walk_type)} mr-1"></i>${walk.walk_type}
+                    </span>
+                  </div>
+                  <p class="text-xs md:text-sm text-sage-600">${walk.client_name} (${walk.client_email})</p>
+                  <p class="text-xs md:text-sm text-sage-500">${walk.client_phone || 'No phone'}</p>
+                  <p class="text-xs md:text-sm text-sage-500">Time: ${walk.scheduled_time || 'Not specified'}</p>
+                  ${walk.special_requirements ? `<p class="text-xs md:text-sm text-sage-500 mt-1 md:mt-2">${walk.special_requirements}</p>` : ''}
+                </div>
+                <button onclick="openDeleteModal('${walk.id}')" class="px-3 md:px-4 py-2 rounded-lg bg-red-500 text-white text-xs md:text-sm font-semibold hover:bg-red-600 transition">Remove</button>
+              </div>
+            </div>
+          `}).join('');
+        } else {
+          todayWalksList.innerHTML = `
+            <div class="text-center py-8 md:py-12">
+              <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-sage-100 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-sun text-2xl md:text-3xl text-sage-400"></i>
+              </div>
+              <h3 class="text-lg md:text-xl font-bold text-sage-800 mb-2">No Walks Today</h3>
+              <p class="text-sage-600 text-sm md:text-base">You don't have any walks scheduled for today.</p>
+            </div>
+          `;
+        }
+      } catch (err) {
+        console.error('Error loading today walks:', err);
+      }
+    }
+
+    // Load other walks from Supabase
+    async function loadOtherWalks() {
+      try {
+        const { data: otherWalks, error } = await SupabaseClient
+          .from('walks')
+          .select('*')
+          .or('walk_type.eq.other,walk_type.eq.Block Booking')
+          .eq('status', 'scheduled')
+          .order('scheduled_date', { ascending: true });
+
+        if (error) throw error;
+
+        const otherWalksList = document.getElementById('other-walks-list');
+        
+        if (otherWalks && otherWalks.length > 0) {
+          otherWalksList.innerHTML = otherWalks.map(walk => {
+            // Get walk type styling
+            const getWalkTypeColor = (type) => {
+              switch(type) {
+                case 'other': return 'bg-purple-100 text-purple-700';
+                case 'Block Booking': return 'bg-indigo-100 text-indigo-700';
+                default: return 'bg-sage-100 text-sage-700';
+              }
+            };
+            
+            const getWalkTypeIcon = (type) => {
+              switch(type) {
+                case 'other': return 'fa-star';
+                case 'Block Booking': return 'fa-calendar-check';
+                default: return 'fa-paw';
+              }
+            };
+            
+            return `
+            <div class="border border-sage-200 rounded-xl p-3 md:p-4 mb-3 md:mb-4 hover:border-terracotta-300 transition">
+              <div class="flex flex-col md:flex-row justify-between items-start gap-3 md:gap-0">
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-2">
+                    <h4 class="font-semibold text-sage-900 text-sm md:text-base">${walk.dog_name}</h4>
+                    <span class="text-xs md:text-sm px-2 py-1 rounded-full ${getWalkTypeColor(walk.walk_type)}">
+                      <i class="fas ${getWalkTypeIcon(walk.walk_type)} mr-1"></i>${walk.walk_type}
+                    </span>
+                  </div>
+                  <p class="text-xs md:text-sm text-sage-600">${walk.client_name} (${walk.client_email})</p>
+                  <p class="text-xs md:text-sm text-sage-500">${walk.client_phone || 'No phone'}</p>
+                  <p class="text-xs md:text-sm text-sage-500">Scheduled: ${walk.scheduled_date} ${walk.scheduled_time || ''}</p>
+                  ${walk.special_requirements ? `<p class="text-xs md:text-sm text-sage-500 mt-1 md:mt-2">${walk.special_requirements}</p>` : ''}
+                </div>
+                <button onclick="openDeleteModal('${walk.id}')" class="px-3 md:px-4 py-2 rounded-lg bg-red-500 text-white text-xs md:text-sm font-semibold hover:bg-red-600 transition">Remove</button>
+              </div>
+            </div>
+          `}).join('');
+        } else {
+          otherWalksList.innerHTML = `
+            <div class="text-center py-8 md:py-12">
+              <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-sage-100 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-star text-2xl md:text-3xl text-sage-400"></i>
+              </div>
+              <h3 class="text-lg md:text-xl font-bold text-sage-800 mb-2">No Other Walks</h3>
+              <p class="text-sage-600 text-sm md:text-base">You don't have any other or block booking walks.</p>
+            </div>
+          `;
+        }
+      } catch (err) {
+        console.error('Error loading other walks:', err);
+      }
+    }
+
     // Load pending walks from Supabase
     async function loadPendingWalks() {
       try {
@@ -593,11 +961,45 @@
         const pendingWalksList = document.getElementById('pending-walks-list');
         
         if (pendingWalks && pendingWalks.length > 0) {
-          pendingWalksList.innerHTML = pendingWalks.map(walk => `
+          pendingWalksList.innerHTML = pendingWalks.map(walk => {
+            // Get walk type styling
+            const getWalkTypeColor = (type) => {
+              switch(type) {
+                case 'walk': return 'bg-terracotta-100 text-terracotta-700';
+                case 'sitting': return 'bg-blue-100 text-blue-700';
+                case 'grooming': return 'bg-purple-100 text-purple-700';
+                default: return 'bg-sage-100 text-sage-700';
+              }
+            };
+            
+            const getWalkTypeIcon = (type) => {
+              switch(type) {
+                case 'walk': return 'fa-walking';
+                case 'sitting': return 'fa-home';
+                case 'grooming': return 'fa-cut';
+                default: return 'fa-paw';
+              }
+            };
+            
+            const getWalkTypeLabel = (type) => {
+              switch(type) {
+                case 'walk': return 'Walk';
+                case 'sitting': return 'Pet Sitting';
+                case 'grooming': return 'Grooming';
+                default: return type.charAt(0).toUpperCase() + type.slice(1);
+              }
+            };
+            
+            return `
             <div class="border border-sage-200 rounded-xl p-3 md:p-4 mb-3 md:mb-4 hover:border-terracotta-300 transition">
               <div class="flex flex-col md:flex-row justify-between items-start gap-3 md:gap-0">
                 <div class="flex-1">
-                  <h4 class="font-semibold text-sage-900 text-sm md:text-base">${walk.dog_name} - ${walk.walk_type}</h4>
+                  <div class="flex items-center gap-2 mb-2">
+                    <h4 class="font-semibold text-sage-900 text-sm md:text-base">${walk.dog_name}</h4>
+                    <span class="text-xs md:text-sm px-2 py-1 rounded-full ${getWalkTypeColor(walk.walk_type)}">
+                      <i class="fas ${getWalkTypeIcon(walk.walk_type)} mr-1"></i>${getWalkTypeLabel(walk.walk_type)}
+                    </span>
+                  </div>
                   <p class="text-xs md:text-sm text-sage-600">${walk.client_name} (${walk.client_email})</p>
                   <p class="text-xs md:text-sm text-sage-500">${walk.client_phone || 'No phone'}</p>
                   ${walk.special_requirements ? `<p class="text-xs md:text-sm text-sage-500 mt-1 md:mt-2">${walk.special_requirements}</p>` : ''}
@@ -608,7 +1010,7 @@
                 </div>
               </div>
             </div>
-          `).join('');
+          `}).join('');
         } else {
           pendingWalksList.innerHTML = `
             <div class="text-center py-12">
@@ -654,32 +1056,37 @@
       }, 1000);
     };
 
+    // Open delete modal
+    window.openDeleteModal = function(walkId) {
+      currentWalkToDelete = walkId;
+      deleteWalkModal.classList.remove('hidden');
+    };
+
     // Decline walk
-    window.declineWalk = async function(walkId) {
-      try {
-        const { error } = await SupabaseClient
-          .from('pendingwalks')
-          .update({ status: 'declined' })
-          .eq('id', walkId);
-
-        if (error) throw error;
-
-        // Vibrate device 3 times if supported (vibrate 200ms, pause 100ms, repeat 3 times)
-        if ('vibrate' in navigator) {
-          try {
-            navigator.vibrate([200, 100, 200, 100, 200]);
-          } catch (vibrateError) {
-            console.warn('Vibration failed:', vibrateError);
-          }
+    window.declineWalk = function(walkId) {
+      currentPendingWalkId = walkId;
+      
+      // Show confirmation modal first
+      declineConfirmModal.classList.remove('hidden');
+      
+      // Start 5-second timer
+      let countdown = 5;
+      confirmDeclineBtn.disabled = true;
+      confirmDeclineText.classList.add('hidden');
+      confirmDeclineTimer.classList.remove('hidden');
+      confirmDeclineTimer.textContent = ` (${countdown}s)`;
+      
+      declineTimer = setInterval(() => {
+        countdown--;
+        confirmDeclineTimer.textContent = ` (${countdown}s)`;
+        
+        if (countdown <= 0) {
+          clearInterval(declineTimer);
+          confirmDeclineBtn.disabled = false;
+          confirmDeclineText.classList.remove('hidden');
+          confirmDeclineTimer.classList.add('hidden');
         }
-
-        // Show decline modal
-        declineWalkModal.classList.remove('hidden');
-        loadPendingWalks();
-      } catch (err) {
-        console.error('Error declining walk:', err);
-        alert('Failed to decline walk. Please try again.');
-      }
+      }, 1000);
     };
 
     logoutBtn.addEventListener('click', async () => {
